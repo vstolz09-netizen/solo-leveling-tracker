@@ -78,70 +78,35 @@
             pointer-events: none;
         }
 
-        .system-panel::before {
-            top: -1px;
-            left: -1px;
-            border-width: 2px 0 0 2px;
-        }
-
-        .system-panel::after {
-            bottom: -1px;
-            right: -1px;
-            border-width: 0 2px 2px 0;
-        }
+        .system-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        .system-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
         .system-panel-purple {
             border-color: rgba(147, 51, 234, 0.4);
             box-shadow: 0 0 20px rgba(147, 51, 234, 0.1), inset 0 0 15px rgba(147, 51, 234, 0.05);
         }
-
-        .system-panel-purple::before, .system-panel-purple::after {
-            border-color: #a855f7;
-        }
+        .system-panel-purple::before, .system-panel-purple::after { border-color: #a855f7; }
 
         .system-panel-danger {
-            border-color: rgba(255, 42, 95, 0.5);
-            box-shadow: 0 0 25px rgba(255, 42, 95, 0.15), inset 0 0 15px rgba(255, 42, 95, 0.08);
+            border-color: rgba(255, 42, 95, 0.55);
+            box-shadow: 0 0 25px rgba(255, 42, 95, 0.18), inset 0 0 15px rgba(255, 42, 95, 0.08);
         }
+        .system-panel-danger::before, .system-panel-danger::after { border-color: #ff2a5f; }
 
-        .system-panel-danger::before, .system-panel-danger::after {
-            border-color: #ff2a5f;
-        }
+        .glow-text-cyan { text-shadow: 0 0 10px rgba(0, 229, 255, 0.6); }
+        .glow-text-purple { text-shadow: 0 0 10px rgba(168, 85, 247, 0.6); }
+        .glow-text-danger { text-shadow: 0 0 12px rgba(255, 42, 95, 0.8); }
 
-        .glow-text-cyan {
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
-        }
-
-        .glow-text-purple {
-            text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
-        }
-
-        .glow-text-danger {
-            text-shadow: 0 0 12px rgba(255, 42, 95, 0.8);
-        }
-
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #05070c;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e3a5f;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00e5ff;
-        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #05070c; }
+        ::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00e5ff; }
 
         @keyframes pulseGlow {
             0%, 100% { box-shadow: 0 0 12px rgba(0, 229, 255, 0.4); }
             50% { box-shadow: 0 0 24px rgba(0, 229, 255, 0.8); }
         }
-        .animate-pulse-glow {
-            animation: pulseGlow 2.5s infinite;
-        }
+        .animate-pulse-glow { animation: pulseGlow 2.5s infinite; }
 
         @keyframes scanline {
             0% { transform: translateY(-100%); }
@@ -159,13 +124,8 @@
             animation: scanline 6s linear infinite;
         }
 
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.25s ease-out;
-        }
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content { display: none; animation: fadeIn 0.25s ease-out; }
+        .tab-content.active { display: block; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
@@ -185,17 +145,21 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <span class="font-display font-bold text-lg tracking-wider text-white glow-text-cyan">SYSTEM</span>
-                        <span class="text-[10px] font-display uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">v2.8 // MULTI-STEP</span>
+                        <span class="text-[10px] font-display uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">v3.0 // MONARCH</span>
                     </div>
                     <p class="text-xs text-slate-400 tracking-wide" id="syncStatusText">LOKALER MODUS // INITIALISIERE...</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2">
+                <a href="guild.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-display tracking-wider uppercase bg-purple-600/20 hover:bg-purple-600/35 text-purple-200 border border-purple-400/50 transition">
+                    <i class="fa-solid fa-trophy text-amber-400"></i>
+                    <span>Rangliste</span>
+                </a>
                 <div id="userProfileBadge" class="hidden items-center gap-2 bg-slate-900/90 border border-emerald-500/40 px-3 py-1.5 rounded text-xs">
                     <i class="fa-solid fa-user-astronaut text-emerald-400"></i>
-                    <span id="userEmailDisplay" class="text-slate-200 font-medium truncate max-w-[160px]">Jäger</span>
-                    <button onclick="handleSignOut()" class="ml-2 text-rose-400 hover:text-rose-300 transition" title="Abmelden">
+                    <span id="userEmailDisplay" class="text-slate-200 font-medium truncate max-w-[140px]">Jäger</span>
+                    <button onclick="handleSignOut()" class="ml-1 text-rose-400 hover:text-rose-300 transition" title="Abmelden">
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                 </div>
@@ -280,17 +244,17 @@
                     </div>
                 </div>
 
-                <!-- Streak & Penalty Status -->
+                <!-- Streak, Multiplikator & Overdrive Status -->
                 <div class="lg:col-span-3 flex flex-col justify-between gap-2 bg-slate-950/60 p-3.5 rounded-lg border border-slate-800/80">
                     <div class="flex items-center justify-between">
                         <span class="text-xs text-slate-400 uppercase font-semibold">Heute erreicht</span>
                         <span class="font-display font-bold text-cyan-300"><span id="todayCompletionPctDisplay">0</span>%</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-xs text-slate-400 uppercase font-semibold">Aktuelle Serie</span>
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Serie & XP-Bonus</span>
                         <span class="font-display font-bold text-amber-400 flex items-center gap-1.5">
                             <i class="fa-solid fa-fire"></i>
-                            <span id="streakDisplay">0</span> Tage
+                            <span id="streakDisplay">0</span>T (<span id="streakBonusDisplay" class="text-emerald-400">+0%</span>)
                         </span>
                     </div>
                     <div class="flex items-center justify-between pt-1 border-t border-slate-800">
@@ -299,6 +263,33 @@
                     </div>
                 </div>
 
+            </div>
+        </section>
+
+        <!-- SUDDEN QUEST / NOTFALL-QUEST BANNER -->
+        <section id="suddenQuestBox" class="hidden system-panel system-panel-danger rounded-lg p-5">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-rose-500/20 border border-rose-500 flex items-center justify-center flex-shrink-0 animate-pulse">
+                        <i class="fa-solid fa-bolt text-rose-400 text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="font-display font-bold text-rose-400 tracking-wider uppercase glow-text-danger">[NOTFALL-QUEST] PLÖTZLICHER EINSATZ</span>
+                            <span id="suddenQuestTimerBadge" class="text-xs bg-rose-500/20 text-rose-200 border border-rose-500/50 px-2 py-0.5 rounded font-display font-bold">30:00</span>
+                        </div>
+                        <p id="suddenQuestDesc" class="text-sm text-white font-semibold mt-1">Ein Blutlust-Impuls wurde erkannt! Absolviere 30 Liegestütze oder 2 Minuten Plank.</p>
+                        <p class="text-xs font-display text-amber-300 mt-1">BELOHNUNG: +75 XP & +1 ZUFÄLLIGER STATUSPUNKT (KEINE STRAFE BEI IGNORIEREN)</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <button onclick="dismissSuddenQuest()" class="px-3 py-2 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-700 font-display text-xs uppercase">
+                        Ignorieren
+                    </button>
+                    <button onclick="completeSuddenQuest()" class="flex-1 md:flex-initial px-5 py-2 rounded bg-rose-600 hover:bg-rose-500 text-white font-display font-bold text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(255,42,95,0.5)] transition">
+                        Notfall-Quest abschließen (+75 XP)
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -329,14 +320,14 @@
             <button onclick="switchTab('daily')" id="tab-btn-daily" class="tab-btn active px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 transition whitespace-nowrap">
                 <i class="fa-solid fa-dumbbell mr-1.5"></i>Tägliche Quest
             </button>
-            <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
-                <i class="fa-solid fa-calendar-days mr-1.5"></i>Kalender & Verlauf
-            </button>
             <button onclick="switchTab('dungeons')" id="tab-btn-dungeons" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
-                <i class="fa-solid fa-dungeon mr-1.5"></i>Dungeons & Boss-Quests
+                <i class="fa-solid fa-dungeon mr-1.5"></i>Dungeons & Gilden-Raid
             </button>
             <button onclick="switchTab('shadow')" id="tab-btn-shadow" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
-                <i class="fa-solid fa-ghost mr-1.5"></i>Schattenarmee
+                <i class="fa-solid fa-ghost mr-1.5"></i>Schattenarmee & Expeditionen
+            </button>
+            <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
+                <i class="fa-solid fa-calendar-days mr-1.5"></i>Kalender & Verlauf
             </button>
             <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
                 <i class="fa-solid fa-sliders mr-1.5"></i>Übungen & Ziele
@@ -348,10 +339,15 @@
             <div class="system-panel rounded-lg p-5">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-5">
                     <div>
-                        <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">VORBEREITUNG, UM STARK ZU WERDEN // HEUTE: <span id="dailyPctBadge">0%</span></span>
+                        <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">
+                            HEUTE: <span id="dailyPctBadge">0%</span> // OVERDRIVE-BONUS: <span id="overdriveBonusBadge" class="text-amber-300">+0 XP</span>
+                        </span>
                         <h2 class="font-display font-bold text-xl text-white mt-0.5">TÄGLICHE QUEST: PHYSISCHES TRAINING</h2>
                     </div>
                     <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="triggerSuddenQuest(true)" class="px-3 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/40 transition" title="Zufällige Notfall-Quest spawnen">
+                            <i class="fa-solid fa-bolt mr-1"></i>Notfall-Quest
+                        </button>
                         <button onclick="openAddExerciseModal()" class="px-3.5 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/40 transition">
                             <i class="fa-solid fa-plus mr-1.5"></i>Übung hinzufügen
                         </button>
@@ -363,6 +359,18 @@
                             Belohnung einfordern (+100 XP)
                         </button>
                     </div>
+                </div>
+
+                <!-- Info-Leiste für Streak & Overdrive -->
+                <div class="bg-slate-950/70 border border-slate-800 rounded-lg px-4 py-2.5 mb-4 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <span class="text-slate-300">
+                        <i class="fa-solid fa-fire text-amber-400 mr-1"></i>
+                        <strong>Serien-Bonus:</strong> Alle 3 Tage Serie <span class="text-emerald-400 font-display font-bold">+10% XP</span> (max. +50%).
+                    </span>
+                    <span class="text-slate-300">
+                        <i class="fa-solid fa-gauge-high text-cyan-400 mr-1"></i>
+                        <strong>Overdrive (bis 150%):</strong> Jede +10% Übererfüllung bringt <span class="text-amber-300 font-display font-bold">+30 Bonus-XP</span>!
+                    </span>
                 </div>
 
                 <!-- Exercise List -->
@@ -378,7 +386,7 @@
                         <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">TAGESFORTSCHRITT IM VERLAUF</span>
                         <h3 class="font-display font-bold text-lg text-white">ERREICHTE TAGESZIELE IN % PRO TAG</h3>
                     </div>
-                    <span class="text-xs font-display text-slate-400">X: TAGE // Y: 0–100%</span>
+                    <span class="text-xs font-display text-slate-400">X: TAGE // Y: 0–150%</span>
                 </div>
                 <div class="relative h-64 w-full">
                     <canvas id="dailyProgressChartCompact"></canvas>
@@ -386,7 +394,93 @@
             </div>
         </section>
 
-        <!-- TAB 2: CALENDAR & DAILY % CHART -->
+        <!-- TAB 2: CUSTOM DUNGEONS & GILDEN-BOSS-RAID -->
+        <section id="tab-dungeons" class="tab-content space-y-5">
+            <!-- KOOP GILDEN-BOSS-RAID -->
+            <div class="system-panel system-panel-danger rounded-lg p-5 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-display text-rose-400 tracking-widest uppercase">KOOP-WELTBOSS // ALLE JÄGER GEMEINSAM</span>
+                            <span class="text-[10px] font-display px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">S-RANG RAID</span>
+                        </div>
+                        <h2 id="raidBossName" class="font-display font-bold text-xl text-white mt-0.5">BLUTROTER KOMMANDANT IGRIS (RAID-BOSS)</h2>
+                        <p class="text-xs text-slate-300 mt-0.5">Jede Wiederholung oder gelaufene Einheit, die du in deinen Tagesübungen hinzufügst, verursacht direkten Schaden am Boss!</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="claimRaidRewardBtn" onclick="claimRaidBossReward()" disabled
+                            class="px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed transition">
+                            Raid-Belohnung (+250 XP)
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between text-xs font-display font-bold mb-1.5">
+                        <span class="text-rose-400">BOSS-HP</span>
+                        <span class="text-white"><span id="raidBossCurrentHp">2500</span> / <span id="raidBossMaxHp">2500</span> HP (<span id="raidBossHpPct">100</span>%)</span>
+                    </div>
+                    <div class="w-full h-4 bg-slate-950 rounded-full overflow-hidden border border-rose-500/40 p-0.5">
+                        <div id="raidBossHpBar" class="h-full bg-gradient-to-r from-rose-600 via-red-500 to-amber-500 rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(255,42,95,0.6)]" style="width: 100%"></div>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-slate-400 mt-2">
+                        <span>Dein gesamter Raid-Schaden: <strong id="myRaidDamageDisplay" class="text-cyan-300 font-display">0</strong> DMG</span>
+                        <button onclick="resetRaidBoss()" class="text-[11px] font-display text-slate-500 hover:text-rose-300 underline">Neuen Boss beschwören</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EIGENE DUNGEONS -->
+            <div class="system-panel system-panel-purple rounded-lg p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-5">
+                    <div>
+                        <span class="text-xs font-display text-purple-400 tracking-widest uppercase">INSTANZ-DUNGEONS & SPEZIALAUFTRÄGE</span>
+                        <h2 class="font-display font-bold text-xl text-white mt-0.5">EIGENE WORKOUTS & ZIELE</h2>
+                    </div>
+                    <button onclick="openNewQuestModal()" class="px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-400/60 shadow-[0_0_12px_rgba(147,51,234,0.3)] transition">
+                        <i class="fa-solid fa-plus mr-1.5"></i>Neue Quest erstellen
+                    </button>
+                </div>
+
+                <div id="customQuestsContainer" class="space-y-3">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: SHADOW ARMY & EXPEDITIONS -->
+        <section id="tab-shadow" class="tab-content space-y-5">
+            <!-- AKTIVE SCHATTEN-EXPEDITION -->
+            <div class="system-panel system-panel-purple rounded-lg p-5 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div>
+                        <span class="text-xs font-display text-purple-400 tracking-widest uppercase">PASSIVES XP-SYSTEM // 24H-MISSION</span>
+                        <h2 class="font-display font-bold text-xl text-white mt-0.5">SCHATTEN-EXPEDITION</h2>
+                        <p class="text-xs text-slate-300 mt-1">Schicke einen deiner freigeschalteten Schatten auf eine 24h-Expedition. Bedingung für die Belohnung: Du musst mindestens <strong class="text-cyan-300">80%</strong> deines heutigen Tagesziels erreichen!</p>
+                    </div>
+                    <div id="expeditionActionArea" class="flex-shrink-0">
+                        <!-- Dynamisch -->
+                    </div>
+                </div>
+                <div id="activeExpeditionStatus" class="bg-slate-950/70 border border-slate-800 rounded-lg p-4 text-sm text-slate-300">
+                    Keine aktive Expedition. Wähle unten einen freigeschalteten Schatten aus, um ihn loszuschicken!
+                </div>
+            </div>
+
+            <!-- SCHATTENARMEE GRID -->
+            <div class="system-panel system-panel-purple rounded-lg p-5">
+                <div class="border-b border-slate-800 pb-4 mb-5">
+                    <span class="text-xs font-display text-purple-400 tracking-widest uppercase">EXTRAHIERTE SCHATTEN // MEILENSTEINE</span>
+                    <h2 class="font-display font-bold text-xl text-white mt-0.5">DEINE SCHATTENARMEE</h2>
+                </div>
+
+                <div id="shadowArmyGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: CALENDAR & DAILY % CHART -->
         <section id="tab-calendar" class="tab-content space-y-5">
             <div class="system-panel rounded-lg p-5 space-y-5">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
@@ -407,24 +501,21 @@
                     </div>
                 </div>
 
-                <!-- Wochentage -->
                 <div class="grid grid-cols-7 gap-2 text-center text-xs font-display uppercase text-slate-400">
                     <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
                 </div>
 
-                <!-- Kalendertage -->
                 <div id="calendarGrid" class="grid grid-cols-7 gap-2">
                     <!-- Rendered dynamically -->
                 </div>
 
-                <!-- Ausgewählter Tag Detail & manueller % Eintrag -->
                 <div id="selectedDayDetails" class="bg-slate-950/70 border border-cyan-500/30 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                         <div class="text-xs font-display uppercase text-cyan-400">AUSGEWÄHLTER TAG: <span id="selectedDayLabel" class="text-white">-</span></div>
                         <div class="text-sm text-slate-300 mt-1">Erreichte Tagesziele: <span id="selectedDayPctText" class="font-display font-bold text-cyan-300">0%</span></div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <input type="number" id="manualDayPctInput" min="0" max="100" placeholder="0-100 %"
+                        <input type="number" id="manualDayPctInput" min="0" max="150" placeholder="0-150 %"
                             class="w-28 bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded px-3 py-1.5 text-sm font-display text-white">
                         <button onclick="saveSelectedDayPct()" class="px-4 py-1.5 rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-display font-bold text-xs uppercase transition">
                             % Speichern
@@ -433,7 +524,6 @@
                 </div>
             </div>
 
-            <!-- Großes Diagramm: X = Tage, Y = erreichte % -->
             <div class="system-panel rounded-lg p-5 space-y-4">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
                     <div>
@@ -452,40 +542,6 @@
             </div>
         </section>
 
-        <!-- TAB 3: CUSTOM DUNGEONS & SIDE QUESTS -->
-        <section id="tab-dungeons" class="tab-content space-y-5">
-            <div class="system-panel system-panel-purple rounded-lg p-5">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-5">
-                    <div>
-                        <span class="text-xs font-display text-purple-400 tracking-widest uppercase">INSTANZ-DUNGEONS & SPEZIALAUFTRÄGE</span>
-                        <h2 class="font-display font-bold text-xl text-white mt-0.5">EIGENE WORKOUTS & ZIELE</h2>
-                    </div>
-                    <button onclick="openNewQuestModal()" class="px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-400/60 shadow-[0_0_12px_rgba(147,51,234,0.3)] transition">
-                        <i class="fa-solid fa-plus mr-1.5"></i>Neue Quest erstellen
-                    </button>
-                </div>
-
-                <div id="customQuestsContainer" class="space-y-3">
-                    <!-- Rendered dynamically -->
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: SHADOW ARMY -->
-        <section id="tab-shadow" class="tab-content space-y-5">
-            <div class="system-panel system-panel-purple rounded-lg p-5">
-                <div class="border-b border-slate-800 pb-4 mb-5">
-                    <span class="text-xs font-display text-purple-400 tracking-widest uppercase">EXTRAHIERTE SCHATTEN // MEILENSTEINE</span>
-                    <h2 class="font-display font-bold text-xl text-white mt-0.5">DEINE SCHATTENARMEE</h2>
-                    <p class="text-sm text-slate-400 mt-1">Erreiche höhere Level und schließe Trainingsserien ab, um mächtige Schatten-Kommandanten in deine Armee aufzunehmen.</p>
-                </div>
-
-                <div id="shadowArmyGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Rendered dynamically -->
-                </div>
-            </div>
-        </section>
-
         <!-- TAB 5: SYSTEM SETTINGS & EXERCISE MANAGEMENT -->
         <section id="tab-settings" class="tab-content space-y-5">
             <div class="system-panel rounded-lg p-5 space-y-6">
@@ -493,7 +549,6 @@
                     <div>
                         <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">SYSTEM-KONFIGURATION</span>
                         <h2 class="font-display font-bold text-xl text-white mt-0.5">ÜBUNGEN VERWALTEN & TAGESZIELE ANPASSEN</h2>
-                        <p class="text-sm text-slate-400 mt-1">Füge eigene Übungen hinzu, passe Ziele an oder aktiviere automatische Skalierung beim Level-Up.</p>
                     </div>
                     <button onclick="openAddExerciseModal()" class="px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/50 transition">
                         <i class="fa-solid fa-plus mr-1.5"></i>Neue Übung
@@ -641,7 +696,7 @@
                 <button onclick="closeAuthModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <p class="text-xs text-slate-300 leading-relaxed">
-                Melde dich mit E-Mail/Passwort oder Google an, um deinen Fortschritt in Firestore zu speichern und abzurufen.
+                Melde dich mit E-Mail/Passwort oder Google an, um deinen Fortschritt in Firestore zu speichern und an Gilden-Raids teilzunehmen.
             </p>
             <div class="space-y-3">
                 <div>
@@ -655,10 +710,10 @@
                 <p id="authErrorMsg" class="text-xs text-rose-400 hidden bg-rose-950/50 border border-rose-500/40 rounded p-2"></p>
             </div>
             <div class="flex flex-col sm:flex-row gap-2 pt-2">
-                <button onclick="handleEmailSignIn()" id="emailSignInBtn" class="flex-1 py-2.5 rounded text-xs font-display font-bold uppercase bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition">
+                <button onclick="handleEmailSignIn()" class="flex-1 py-2.5 rounded text-xs font-display font-bold uppercase bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition">
                     Anmelden
                 </button>
-                <button onclick="handleEmailSignUp()" id="emailSignUpBtn" class="flex-1 py-2.5 rounded text-xs font-display font-bold uppercase bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 transition">
+                <button onclick="handleEmailSignUp()" class="flex-1 py-2.5 rounded text-xs font-display font-bold uppercase bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 transition">
                     Registrieren
                 </button>
             </div>
@@ -667,7 +722,7 @@
                 <span class="flex-shrink mx-3 text-[10px] font-display text-slate-500 uppercase">ODER</span>
                 <div class="flex-grow border-t border-slate-800"></div>
             </div>
-            <button onclick="handleGoogleSignIn()" id="googleSignInBtn" class="w-full py-2.5 rounded text-xs font-display font-bold uppercase bg-white hover:bg-slate-200 text-slate-900 flex items-center justify-center gap-2 transition">
+            <button onclick="handleGoogleSignIn()" class="w-full py-2.5 rounded text-xs font-display font-bold uppercase bg-white hover:bg-slate-200 text-slate-900 flex items-center justify-center gap-2 transition">
                 <i class="fa-brands fa-google text-rose-600"></i>
                 Mit Google anmelden
             </button>
@@ -689,7 +744,7 @@
             onAuthStateChanged,
             signOut
         } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBH9PYyoozlpn-uGfNntqu0Tiak8hRU80A",
@@ -702,10 +757,7 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        let analytics = null;
-        try {
-            analytics = getAnalytics(app);
-        } catch (_) {}
+        try { getAnalytics(app); } catch (_) {}
 
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -714,11 +766,73 @@
 
         setPersistence(auth, browserLocalPersistence).catch(() => {});
 
-        window.firebaseApp = app;
-        window.firebaseAnalytics = analytics;
         window.firebaseAuth = auth;
         window.firebaseDb = db;
         window.currentUser = null;
+
+        // Gilden-Raid-Boss Echtzeit-Synchronisation
+        const RAID_DOC_REF = doc(db, "guild_raids", "current_boss");
+        window.raidBossState = {
+            bossId: 1,
+            name: "BLUTROTER KOMMANDANT IGRIS (RAID-BOSS)",
+            maxHp: 2500,
+            currentHp: 2500
+        };
+
+        onSnapshot(RAID_DOC_REF, async (snap) => {
+            if (snap.exists()) {
+                window.raidBossState = snap.data();
+                if (typeof window.renderRaidBoss === 'function') window.renderRaidBoss();
+            } else {
+                try {
+                    await setDoc(RAID_DOC_REF, window.raidBossState);
+                } catch (_) {}
+            }
+        });
+
+        window.dealDamageToRaidBoss = async function(dmg) {
+            if (dmg <= 0) return;
+            window.gameState.myRaidDamage = (window.gameState.myRaidDamage || 0) + dmg;
+            window.raidBossState.currentHp = Math.max(0, (window.raidBossState.currentHp || 0) - dmg);
+            if (typeof window.renderRaidBoss === 'function') window.renderRaidBoss();
+
+            try {
+                const snap = await getDoc(RAID_DOC_REF);
+                if (snap.exists()) {
+                    const cur = snap.data().currentHp ?? 2500;
+                    const nextHp = Math.max(0, cur - dmg);
+                    await setDoc(RAID_DOC_REF, { currentHp: nextHp }, { merge: true });
+                } else {
+                    await setDoc(RAID_DOC_REF, window.raidBossState);
+                }
+            } catch (e) {
+                console.error("Raid Damage Error:", e);
+            }
+        };
+
+        window.spawnNextRaidBoss = async function() {
+            const nextId = (window.raidBossState.bossId || 1) + 1;
+            const bosses = [
+                { name: "BLUTROTER KOMMANDANT IGRIS (RAID-BOSS)", hp: 2500 },
+                { name: "EISBÄREN-MONARCH BARUKA (RAID-BOSS)", hp: 4000 },
+                { name: "HOCHORK-KÖNIG KARGALGAN (RAID-BOSS)", hp: 6000 },
+                { name: "AMEISENKÖNIG BERU (S-RANG RAID)", hp: 10000 }
+            ];
+            const pick = bosses[(nextId - 1) % bosses.length];
+            const nextState = {
+                bossId: nextId,
+                name: pick.name,
+                maxHp: pick.hp,
+                currentHp: pick.hp
+            };
+            window.raidBossState = nextState;
+            window.gameState.claimedRaidBossId = 0;
+            window.saveState();
+            if (typeof window.renderRaidBoss === 'function') window.renderRaidBoss();
+            try {
+                await setDoc(RAID_DOC_REF, nextState);
+            } catch (_) {}
+        };
 
         function formatAuthError(err) {
             const code = err?.code || '';
@@ -733,15 +847,6 @@
             }
             if (code === 'auth/invalid-email') {
                 return 'Bitte gib eine gültige E-Mail-Adresse ein.';
-            }
-            if (code === 'auth/unauthorized-domain') {
-                return 'Domain nicht autorisiert: Füge deine GitHub-Pages-Domain in Firebase Auth -> Settings -> Authorized domains hinzu.';
-            }
-            if (code === 'auth/popup-blocked') {
-                return 'Popup blockiert: Bitte Popups im Browser erlauben.';
-            }
-            if (code === 'auth/popup-closed-by-user') {
-                return 'Login-Fenster wurde geschlossen.';
             }
             return err?.message || 'Unbekannter Login-Fehler.';
         }
@@ -809,7 +914,6 @@
                 }
             } catch (err) {
                 console.error("Cloud Load Error:", err);
-                window.showNotification("CLOUD-HINWEIS", "Firestore-Lesen fehlgeschlagen. Prüfe die Firestore-Regeln.", "fa-triangle-exclamation");
             }
         }
 
@@ -817,34 +921,24 @@
             clearAuthError();
             const email = document.getElementById('authEmail').value.trim();
             const pass = document.getElementById('authPassword').value;
-            if (!email || !pass) {
-                showAuthError('Bitte E-Mail und Passwort eingeben.');
-                return;
-            }
+            if (!email || !pass) { showAuthError('Bitte E-Mail und Passwort eingeben.'); return; }
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
                 window.closeAuthModal();
                 window.showNotification("LOGIN ERFOLGREICH", "Willkommen zurück, Jäger!", "fa-check-circle");
-            } catch (e) {
-                showAuthError(formatAuthError(e));
-            }
+            } catch (e) { showAuthError(formatAuthError(e)); }
         };
 
         window.handleEmailSignUp = async function() {
             clearAuthError();
             const email = document.getElementById('authEmail').value.trim();
             const pass = document.getElementById('authPassword').value;
-            if (!email || !pass) {
-                showAuthError('Bitte E-Mail und Passwort eingeben.');
-                return;
-            }
+            if (!email || !pass) { showAuthError('Bitte E-Mail und Passwort eingeben.'); return; }
             try {
                 await createUserWithEmailAndPassword(auth, email, pass);
                 window.closeAuthModal();
                 window.showNotification("KONTO ERSTELLT", "Dein Jäger-Profil ist jetzt aktiv!", "fa-user-plus");
-            } catch (e) {
-                showAuthError(formatAuthError(e));
-            }
+            } catch (e) { showAuthError(formatAuthError(e)); }
         };
 
         window.handleGoogleSignIn = async function() {
@@ -853,24 +947,20 @@
                 await signInWithPopup(auth, googleProvider);
                 window.closeAuthModal();
                 window.showNotification("GOOGLE LOGIN", "Erfolgreich mit Google angemeldet!", "fa-check-circle");
-            } catch (e) {
-                showAuthError(formatAuthError(e));
-            }
+            } catch (e) { showAuthError(formatAuthError(e)); }
         };
 
         window.handleSignOut = async function() {
             try {
                 await signOut(auth);
                 window.showNotification("ABGEMELDET", "Du wurdest abgemeldet.", "fa-right-from-bracket");
-            } catch (e) {
-                window.showNotification("FEHLER", formatAuthError(e), "fa-triangle-exclamation");
-            }
+            } catch (e) { window.showNotification("FEHLER", formatAuthError(e), "fa-triangle-exclamation"); }
         };
     </script>
 
     <!-- MAIN APPLICATION LOGIC -->
     <script>
-        const STORAGE_KEY = 'solo_leveling_tracker_v2_7';
+        const STORAGE_KEY = 'solo_leveling_tracker_v3_0';
 
         function getTodayStr() {
             return new Date().toISOString().split('T')[0];
@@ -894,6 +984,11 @@
             penaltyActive: false,
             dailyClaimedToday: false,
             autoScale: true,
+            myRaidDamage: 0,
+            claimedRaidBossId: 0,
+            activeExpedition: null, // { shadowId, shadowName, rewardXp, startTime, endTime }
+            suddenQuest: null,      // { id, desc, expiresAt, xp }
+            lastSuddenQuestDate: '',
             dailyExercises: JSON.parse(JSON.stringify(DEFAULT_EXERCISES)),
             dailyHistory: {},
             customQuests: [
@@ -903,14 +998,21 @@
         };
 
         const SHADOW_ARMY = [
-            { id: 'igris', name: 'IGRIS', title: 'Blutroter Kommandant', reqLevel: 5, icon: 'fa-chess-knight', desc: 'Freigeschaltet ab Level 5' },
-            { id: 'tank', name: 'TANK', title: 'Eisbären-Alpha', reqLevel: 10, icon: 'fa-paw', desc: 'Freigeschaltet ab Level 10' },
-            { id: 'iron', name: 'IRON', title: 'Schwerer Schildträger', reqLevel: 15, icon: 'fa-shield-halved', desc: 'Freigeschaltet ab Level 15' },
-            { id: 'tusk', name: 'TUSK', title: 'Hochork-Schamane', reqLevel: 25, icon: 'fa-wand-sparkles', desc: 'Freigeschaltet ab Level 25' },
-            { id: 'kaisel', name: 'KAISEL', title: 'Schatten-Wyvern', reqLevel: 35, icon: 'fa-dragon', desc: 'Freigeschaltet ab Level 35' },
-            { id: 'beru', name: 'BERU', title: 'Ameisenkönig-Marshal', reqLevel: 50, icon: 'fa-crown', desc: 'Freigeschaltet ab Level 50' },
-            { id: 'greed', name: 'GREED', title: 'General-Klasse Schatten', reqLevel: 70, icon: 'fa-skull', desc: 'Freigeschaltet ab Level 70' },
-            { id: 'bellion', name: 'BELLION', title: 'Großmarschall der Schatten', reqLevel: 100, icon: 'fa-khanda', desc: 'Freigeschaltet ab Level 100' }
+            { id: 'igris', name: 'IGRIS', title: 'Blutroter Kommandant', reqLevel: 5, expXp: 50, icon: 'fa-chess-knight', desc: 'Freigeschaltet ab Level 5' },
+            { id: 'tank', name: 'TANK', title: 'Eisbären-Alpha', reqLevel: 10, expXp: 65, icon: 'fa-paw', desc: 'Freigeschaltet ab Level 10' },
+            { id: 'iron', name: 'IRON', title: 'Schwerer Schildträger', reqLevel: 15, expXp: 75, icon: 'fa-shield-halved', desc: 'Freigeschaltet ab Level 15' },
+            { id: 'tusk', name: 'TUSK', title: 'Hochork-Schamane', reqLevel: 25, expXp: 90, icon: 'fa-wand-sparkles', desc: 'Freigeschaltet ab Level 25' },
+            { id: 'kaisel', name: 'KAISEL', title: 'Schatten-Wyvern', reqLevel: 35, expXp: 100, icon: 'fa-dragon', desc: 'Freigeschaltet ab Level 35' },
+            { id: 'beru', name: 'BERU', title: 'Ameisenkönig-Marshal', reqLevel: 50, expXp: 120, icon: 'fa-crown', desc: 'Freigeschaltet ab Level 50' },
+            { id: 'greed', name: 'GREED', title: 'General-Klasse Schatten', reqLevel: 70, expXp: 140, icon: 'fa-skull', desc: 'Freigeschaltet ab Level 70' },
+            { id: 'bellion', name: 'BELLION', title: 'Großmarschall der Schatten', reqLevel: 100, expXp: 180, icon: 'fa-khanda', desc: 'Freigeschaltet ab Level 100' }
+        ];
+
+        const SUDDEN_QUEST_POOL = [
+            "Ein Blutlust-Impuls wurde erkannt! Absolviere sofort 30 Liegestütze.",
+            "Instanz-Riss in der Nähe! Halte 2 Minuten Plank ohne Pause.",
+            "System-Test der Ausdauer: Absolviere 40 Kniebeugen in unter 3 Minuten.",
+            "Schatten-Resonanz erkannt: 25 Burpees oder 50 Hampelmänner jetzt ausführen!"
         ];
 
         window.gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
@@ -924,7 +1026,7 @@
         let selectedCalendarDate = getTodayStr();
 
         function initApp() {
-            const saved = localStorage.getItem(STORAGE_KEY);
+            const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('solo_leveling_tracker_v2_7');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
@@ -942,6 +1044,7 @@
                 }
             }
             checkDayRollover();
+            maybeSpawnDailySuddenQuest();
             recordTodayPercentage();
             renderAll();
             startCountdownTimer();
@@ -967,12 +1070,12 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(window.gameState));
         }
 
-        function saveState() {
+        window.saveState = function() {
             saveLocalOnly();
             if (typeof window.saveToCloud === 'function') {
                 window.saveToCloud(window.gameState);
             }
-        }
+        };
 
         function checkDayRollover() {
             const today = getTodayStr();
@@ -991,24 +1094,191 @@
                 window.gameState.dailyClaimedToday = false;
                 window.gameState.lastActiveDate = today;
                 recordTodayPercentage();
-                saveState();
+                window.saveState();
             }
         }
 
+        // Berechnet % inkl. Overdrive bis max. 150%
         function calculateDailyCompletionPct() {
             const list = window.gameState.dailyExercises;
             if (!list || list.length === 0) return 0;
             const sumRatios = list.reduce((acc, ex) => {
                 const goal = ex.goal > 0 ? ex.goal : 1;
-                const ratio = Math.min(1, Math.max(0, ex.current / goal));
+                const ratio = Math.min(1.5, Math.max(0, ex.current / goal));
                 return acc + ratio;
             }, 0);
             return Math.round((sumRatios / list.length) * 100);
         }
 
+        // Streak-Multiplikator: +10% pro 3 Tage Serie (max. +50%)
+        function getStreakBonusPct() {
+            const streak = window.gameState.streak || 0;
+            const steps = Math.floor(streak / 3);
+            return Math.min(50, steps * 10);
+        }
+
+        // Overdrive-Bonus: +30 XP pro +10% über 100% (bis max. 150% -> +150 XP)
+        function getOverdriveBonusXp() {
+            const pct = calculateDailyCompletionPct();
+            if (pct <= 100) return 0;
+            const extraSteps = Math.floor((pct - 100) / 10);
+            return extraSteps * 30;
+        }
+
+        // Gesamt-XP für die Tägliche Quest berechnen
+        function calculateDailyQuestTotalXp() {
+            const baseXp = 100;
+            const streakMult = 1 + (getStreakBonusPct() / 100);
+            const scaledBase = Math.round(baseXp * streakMult);
+            const overdriveXp = getOverdriveBonusXp();
+            return scaledBase + overdriveXp;
+        }
+
         function recordTodayPercentage() {
             const today = getTodayStr();
             window.gameState.dailyHistory[today] = calculateDailyCompletionPct();
+        }
+
+        // PLÖTZLICHE QUESTS (SUDDEN QUESTS)
+        function maybeSpawnDailySuddenQuest() {
+            const today = getTodayStr();
+            if (window.gameState.lastSuddenQuestDate === today) return;
+            // 35% Chance beim ersten Öffnen am Tag
+            if (Math.random() < 0.35 && !window.gameState.suddenQuest) {
+                triggerSuddenQuest(false);
+            }
+        }
+
+        function triggerSuddenQuest(manual = false) {
+            const today = getTodayStr();
+            const desc = SUDDEN_QUEST_POOL[Math.floor(Math.random() * SUDDEN_QUEST_POOL.length)];
+            window.gameState.suddenQuest = {
+                id: Date.now(),
+                desc,
+                expiresAt: Date.now() + 30 * 60 * 1000, // 30 Minuten
+                xp: 75
+            };
+            window.gameState.lastSuddenQuestDate = today;
+            window.saveState();
+            renderSuddenQuest();
+            if (manual) {
+                showNotification("NOTFALL-QUEST", "Eine plötzliche Quest ist erschienen! (+75 XP)", "fa-bolt");
+            }
+        }
+
+        function completeSuddenQuest() {
+            if (!window.gameState.suddenQuest) return;
+            const statKeys = ['str', 'agi', 'vit', 'int', 'per'];
+            const randomStat = statKeys[Math.floor(Math.random() * statKeys.length)];
+            window.gameState.stats[randomStat] += 1;
+            window.gameState.suddenQuest = null;
+            showNotification("NOTFALL-QUEST GEKLÄRT", `+75 XP und +1 ${randomStat.toUpperCase()} erhalten!`, "fa-bolt");
+            addXp(75);
+        }
+
+        function dismissSuddenQuest() {
+            window.gameState.suddenQuest = null;
+            window.saveState();
+            renderSuddenQuest();
+        }
+
+        function renderSuddenQuest() {
+            const box = document.getElementById('suddenQuestBox');
+            const sq = window.gameState.suddenQuest;
+            if (!sq || Date.now() > sq.expiresAt) {
+                if (sq && Date.now() > sq.expiresAt) {
+                    window.gameState.suddenQuest = null;
+                    window.saveState();
+                }
+                box.classList.add('hidden');
+                return;
+            }
+            document.getElementById('suddenQuestDesc').textContent = sq.desc;
+            box.classList.remove('hidden');
+        }
+
+        // GILDEN-BOSS-RAID
+        window.renderRaidBoss = function() {
+            const rb = window.raidBossState || { bossId: 1, name: "BLUTROTER KOMMANDANT IGRIS", maxHp: 2500, currentHp: 2500 };
+            const maxHp = rb.maxHp || 2500;
+            const curHp = Math.max(0, rb.currentHp ?? maxHp);
+            const pct = Math.max(0, Math.min(100, Math.round((curHp / maxHp) * 100)));
+
+            document.getElementById('raidBossName').textContent = rb.name;
+            document.getElementById('raidBossCurrentHp').textContent = curHp;
+            document.getElementById('raidBossMaxHp').textContent = maxHp;
+            document.getElementById('raidBossHpPct').textContent = pct;
+            document.getElementById('raidBossHpBar').style.width = `${pct}%`;
+            document.getElementById('myRaidDamageDisplay').textContent = window.gameState.myRaidDamage || 0;
+
+            const btn = document.getElementById('claimRaidRewardBtn');
+            const alreadyClaimed = window.gameState.claimedRaidBossId === rb.bossId;
+
+            if (curHp <= 0 && !alreadyClaimed) {
+                btn.disabled = false;
+                btn.textContent = "Raid-Belohnung einfordern (+250 XP)";
+                btn.className = "px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-rose-600 hover:bg-rose-500 text-white shadow-[0_0_15px_rgba(255,42,95,0.6)] cursor-pointer transition animate-pulse";
+            } else if (alreadyClaimed) {
+                btn.disabled = true;
+                btn.textContent = "Raid-Belohnung erhalten ✓";
+                btn.className = "px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-emerald-950/60 text-emerald-400 border border-emerald-500/40 cursor-default";
+            } else {
+                btn.disabled = true;
+                btn.textContent = "Raid-Belohnung (+250 XP)";
+                btn.className = "px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed transition";
+            }
+        };
+
+        function claimRaidBossReward() {
+            const rb = window.raidBossState;
+            if (!rb || rb.currentHp > 0 || window.gameState.claimedRaidBossId === rb.bossId) return;
+            window.gameState.claimedRaidBossId = rb.bossId;
+            showNotification("RAID-BOSS BESIEGT!", "+250 XP für den Gilden-Sieg erhalten!", "fa-crown");
+            addXp(250);
+        }
+
+        function resetRaidBoss() {
+            if (!confirm("Neuen Gilden-Raid-Boss für alle Spieler beschwören?")) return;
+            window.spawnNextRaidBoss();
+            showNotification("NEUER RAID-BOSS", "Ein neuer Boss ist in der Gilde erschienen!", "fa-skull");
+        }
+
+        // SCHATTEN-EXPEDITIONEN (PASSIVE XP)
+        function startShadowExpedition(shadowId) {
+            if (window.gameState.activeExpedition) {
+                showNotification("HINWEIS", "Es läuft bereits eine Schatten-Expedition.", "fa-circle-exclamation");
+                return;
+            }
+            const sh = SHADOW_ARMY.find(s => s.id === shadowId);
+            if (!sh || window.gameState.level < sh.reqLevel) return;
+
+            const now = Date.now();
+            window.gameState.activeExpedition = {
+                shadowId: sh.id,
+                shadowName: sh.name,
+                rewardXp: sh.expXp,
+                startTime: now,
+                endTime: now + 24 * 60 * 60 * 1000
+            };
+            window.saveState();
+            renderShadowArmy();
+            showNotification("EXPEDITION GESTARTET", `${sh.name} ist für 24h auf Mission (+${sh.expXp} XP).`, "fa-ghost");
+        }
+
+        function claimShadowExpedition() {
+            const exp = window.gameState.activeExpedition;
+            if (!exp) return;
+
+            const todayPct = calculateDailyCompletionPct();
+            if (todayPct < 80) {
+                showNotification("BEDINGUNG NICHT ERFÜLLT", `Du brauchst heute mindestens 80% Trainingsfortschritt (aktuell: ${todayPct}%).`, "fa-triangle-exclamation");
+                return;
+            }
+
+            const xpGain = exp.rewardXp || 50;
+            window.gameState.activeExpedition = null;
+            showNotification("EXPEDITION ABGESCHLOSSEN", `${exp.shadowName} kehrt zurück und bringt +${xpGain} XP!`, "fa-ghost");
+            addXp(xpGain);
         }
 
         function getSeriesForDays(daysCount) {
@@ -1073,7 +1343,10 @@
                 let pctBadge = '';
 
                 if (pct !== null) {
-                    if (pct >= 100) {
+                    if (pct > 100) {
+                        statusStyle = 'bg-amber-950/40 border-amber-400/70 text-amber-200 hover:border-amber-300';
+                        pctBadge = `<span class="text-[11px] font-display font-bold text-amber-300">${pct}%</span>`;
+                    } else if (pct >= 100) {
                         statusStyle = 'bg-emerald-950/40 border-emerald-500/60 text-emerald-200 hover:border-emerald-400';
                         pctBadge = `<span class="text-[11px] font-display font-bold text-emerald-400">${pct}%</span>`;
                     } else if (pct > 0) {
@@ -1127,10 +1400,10 @@
             const inputEl = document.getElementById('manualDayPctInput');
             let val = parseInt(inputEl.value, 10);
             if (isNaN(val)) return;
-            val = Math.max(0, Math.min(100, val));
+            val = Math.max(0, Math.min(150, val));
 
             window.gameState.dailyHistory[selectedCalendarDate] = val;
-            saveState();
+            window.saveState();
             renderCalendar();
             updateCharts();
             showNotification("KALENDER GESPEICHERT", `${selectedCalendarDate}: ${val}% eingetragen.`, "fa-calendar-check");
@@ -1138,13 +1411,8 @@
 
         function changeCalendarMonth(delta) {
             calMonth += delta;
-            if (calMonth < 0) {
-                calMonth = 11;
-                calYear -= 1;
-            } else if (calMonth > 11) {
-                calMonth = 0;
-                calYear += 1;
-            }
+            if (calMonth < 0) { calMonth = 11; calYear -= 1; }
+            else if (calMonth > 11) { calMonth = 0; calYear += 1; }
             renderCalendar();
         }
 
@@ -1194,7 +1462,7 @@
                 showNotification("LEVEL UP!", `Du bist auf Level ${window.gameState.level} aufgestiegen! (+3 Status-Punkte)`, "fa-angles-up");
             }
             recordTodayPercentage();
-            saveState();
+            window.saveState();
             renderAll();
         }
 
@@ -1203,16 +1471,27 @@
             const ex = window.gameState.dailyExercises.find(item => item.id === exId);
             if (!ex) return;
 
+            const prevVal = ex.current;
+            // Overdrive erlaubt bis 150% des Tagesziels
+            const maxOverdrive = Math.round((ex.goal * 1.5) * 10) / 10;
             let nextVal = Math.round((ex.current + delta) * 10) / 10;
             if (nextVal < 0) nextVal = 0;
-            if (nextVal > ex.goal) nextVal = ex.goal;
+            if (nextVal > maxOverdrive) nextVal = maxOverdrive;
             ex.current = nextVal;
 
+            // Positiver Fortschritt verursacht Schaden am Gilden-Raid-Boss
+            const actualGain = Math.round((nextVal - prevVal) * 10) / 10;
+            if (actualGain > 0 && typeof window.dealDamageToRaidBoss === 'function') {
+                const dmg = ex.unit === 'km' ? Math.round(actualGain * 10) : Math.round(actualGain);
+                window.dealDamageToRaidBoss(dmg);
+            }
+
             recordTodayPercentage();
-            saveState();
+            window.saveState();
             renderHud();
             renderDailyExercises();
             renderCalendar();
+            renderShadowArmy();
             updateClaimButtonState();
             updateCharts();
         }
@@ -1221,13 +1500,21 @@
             if (window.gameState.dailyClaimedToday) return;
             const ex = window.gameState.dailyExercises.find(item => item.id === exId);
             if (!ex) return;
-            ex.current = ex.goal;
+
+            const actualGain = Math.max(0, ex.goal - ex.current);
+            ex.current = Math.max(ex.current, ex.goal);
+
+            if (actualGain > 0 && typeof window.dealDamageToRaidBoss === 'function') {
+                const dmg = ex.unit === 'km' ? Math.round(actualGain * 10) : Math.round(actualGain);
+                window.dealDamageToRaidBoss(dmg);
+            }
 
             recordTodayPercentage();
-            saveState();
+            window.saveState();
             renderHud();
             renderDailyExercises();
             renderCalendar();
+            renderShadowArmy();
             updateClaimButtonState();
             updateCharts();
         }
@@ -1269,7 +1556,7 @@
             document.getElementById('newExLabel').value = '';
             closeAddExerciseModal();
             recordTodayPercentage();
-            saveState();
+            window.saveState();
             renderAll();
             showNotification("ÜBUNG HINZUGEFÜGT", `"${label}" (${goal} ${unit}) hinzugefügt.`, "fa-dumbbell");
         }
@@ -1281,7 +1568,7 @@
             }
             window.gameState.dailyExercises = window.gameState.dailyExercises.filter(item => item.id !== exId);
             recordTodayPercentage();
-            saveState();
+            window.saveState();
             renderAll();
             showNotification("ÜBUNG ENTFERNT", "Übung wurde entfernt.", "fa-trash");
         }
@@ -1294,6 +1581,7 @@
         function updateClaimButtonState() {
             const btn = document.getElementById('claimDailyRewardBtn');
             const badge = document.getElementById('dailyQuestStatusBadge');
+            const totalXp = calculateDailyQuestTotalXp();
 
             if (window.gameState.dailyClaimedToday) {
                 badge.textContent = "ABGESCHLOSSEN";
@@ -1305,13 +1593,13 @@
                 badge.textContent = "BEREIT ZUM ABSCHLUSS";
                 badge.className = "px-3 py-1.5 rounded text-xs font-display font-bold uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-400 animate-pulse";
                 btn.disabled = false;
-                btn.textContent = "Belohnung einfordern (+100 XP)";
+                btn.textContent = `Belohnung einfordern (+${totalXp} XP)`;
                 btn.className = "px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-[0_0_15px_rgba(0,229,255,0.5)] cursor-pointer transition animate-pulse-glow";
             } else {
                 badge.textContent = "IN ARBEIT";
                 badge.className = "px-3 py-1.5 rounded text-xs font-display font-bold uppercase bg-amber-500/20 text-amber-300 border border-amber-500/40";
                 btn.disabled = true;
-                btn.textContent = "Belohnung einfordern (+100 XP)";
+                btn.textContent = `Belohnung einfordern (+${totalXp} XP)`;
                 btn.className = "px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-slate-800 text-slate-500 border border-slate-700 cursor-not-allowed transition";
             }
         }
@@ -1322,19 +1610,25 @@
                 showNotification("STRAFE AKTIV", "Schließe zuerst die Straf-Quest ab!", "fa-triangle-exclamation");
                 return;
             }
+            const earnedXp = calculateDailyQuestTotalXp();
+            const overdriveBonus = getOverdriveBonusXp();
             window.gameState.dailyClaimedToday = true;
             window.gameState.streak += 1;
             window.gameState.stats.str += 1;
             window.gameState.stats.vit += 1;
             recordTodayPercentage();
-            showNotification("QUEST ABGESCHLOSSEN", "+100 XP, +1 STR, +1 VIT erhalten!", "fa-trophy");
-            addXp(100);
+            showNotification(
+                "QUEST ABGESCHLOSSEN",
+                `+${earnedXp} XP (inkl. +${overdriveBonus} XP Overdrive) & +1 STR, +1 VIT!`,
+                "fa-trophy"
+            );
+            addXp(earnedXp);
         }
 
         function completePenaltyQuest() {
             window.gameState.penaltyActive = false;
             showNotification("STRAFE ÜBERLEBT", "Das System hat deine Strafe aufgehoben.", "fa-shield-check");
-            saveState();
+            window.saveState();
             renderAll();
         }
 
@@ -1342,7 +1636,7 @@
             if (window.gameState.statPoints <= 0) return;
             window.gameState.stats[statKey] += 1;
             window.gameState.statPoints -= 1;
-            saveState();
+            window.saveState();
             renderHud();
         }
 
@@ -1350,13 +1644,15 @@
             const cleaned = val.trim();
             if (cleaned) {
                 window.gameState.playerName = cleaned.toUpperCase();
-                saveState();
+                window.saveState();
             }
         }
 
         function renderAll() {
             renderHud();
+            renderSuddenQuest();
             renderDailyExercises();
+            renderRaidBoss();
             renderCalendar();
             updateClaimButtonState();
             renderCustomQuests();
@@ -1371,6 +1667,8 @@
             const reqXp = getRequiredXpForLevel(gs.level);
             const xpPct = Math.min(100, Math.round((gs.xp / reqXp) * 100));
             const todayPct = calculateDailyCompletionPct();
+            const streakBonus = getStreakBonusPct();
+            const overdriveBonus = getOverdriveBonusXp();
 
             document.getElementById('playerNameInput').value = gs.playerName;
             document.getElementById('playerLevelDisplay').textContent = gs.level;
@@ -1400,7 +1698,9 @@
 
             document.getElementById('todayCompletionPctDisplay').textContent = todayPct;
             document.getElementById('dailyPctBadge').textContent = `${todayPct}%`;
+            document.getElementById('overdriveBonusBadge').textContent = `+${overdriveBonus} XP`;
             document.getElementById('streakDisplay').textContent = gs.streak;
+            document.getElementById('streakBonusDisplay').textContent = `+${streakBonus}%`;
 
             const penaltyBox = document.getElementById('penaltyAlertBox');
             if (gs.penaltyActive) {
@@ -1417,27 +1717,41 @@
             container.innerHTML = exercises.map(ex => {
                 const cur = ex.current;
                 const max = ex.goal;
-                const pct = Math.min(100, Math.round((cur / (max || 1)) * 100));
+                const rawPct = Math.round((cur / (max || 1)) * 100);
+                const barPct = Math.min(100, rawPct);
                 const isDone = cur >= max;
+                const isOverdrive = cur > max;
 
-                // Für km sinnvolle kleine Schritte (0.1 / 0.5 / 1), sonst -10, -5, -1 und +1, +5, +10
                 const isKm = ex.unit === 'km';
                 const sSmall = isKm ? 0.1 : 1;
                 const sMed = isKm ? 0.5 : 5;
                 const sLarge = isKm ? 1 : 10;
 
+                const cardBorder = isOverdrive
+                    ? 'border-amber-400/70 shadow-[0_0_15px_rgba(245,158,11,0.15)]'
+                    : (isDone ? 'border-emerald-500/50' : 'border-slate-800');
+
+                const countColor = isOverdrive
+                    ? 'text-amber-300'
+                    : (isDone ? 'text-emerald-400' : 'text-cyan-300');
+
+                const barColor = isOverdrive
+                    ? 'bg-gradient-to-r from-emerald-400 to-amber-400'
+                    : (isDone ? 'bg-emerald-500' : 'bg-cyan-500');
+
                 return `
-                <div class="bg-slate-950/70 border ${isDone ? 'border-emerald-500/50' : 'border-slate-800'} rounded-lg p-4 transition">
+                <div class="bg-slate-950/70 border ${cardBorder} rounded-lg p-4 transition">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center gap-2.5 min-w-0">
                             <div class="w-8 h-8 rounded bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-400 flex-shrink-0">
                                 <i class="fa-solid ${ex.icon || 'fa-dumbbell'}"></i>
                             </div>
                             <span class="font-display font-bold text-base text-white truncate">${ex.label}</span>
+                            ${isOverdrive ? '<span class="text-[10px] font-display px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/50">OVERDRIVE</span>' : ''}
                         </div>
                         <div class="flex items-center gap-2 flex-shrink-0">
-                            <span class="font-display font-bold text-sm ${isDone ? 'text-emerald-400' : 'text-cyan-300'}">
-                                [${cur} / ${max} ${ex.unit}] <span class="text-xs text-slate-400">(${pct}%)</span>
+                            <span class="font-display font-bold text-sm ${countColor}">
+                                [${cur} / ${max} ${ex.unit}] <span class="text-xs text-slate-400">(${rawPct}%)</span>
                             </span>
                             <button onclick="deleteExercise('${ex.id}')" class="text-slate-500 hover:text-rose-400 transition px-1" title="Übung löschen">
                                 <i class="fa-solid fa-xmark text-xs"></i>
@@ -1446,7 +1760,7 @@
                     </div>
 
                     <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden mb-3">
-                        <div class="h-full ${isDone ? 'bg-emerald-500' : 'bg-cyan-500'} transition-all duration-300" style="width: ${pct}%"></div>
+                        <div class="h-full ${barColor} transition-all duration-300" style="width: ${barPct}%"></div>
                     </div>
 
                     <div class="flex flex-wrap items-center justify-between gap-2">
@@ -1491,13 +1805,12 @@
                 const ex = window.gameState.dailyExercises.find(item => item.id === id);
                 if (ex) {
                     ex.goal = Math.max(0.5, parseFloat(input.value) || ex.goal);
-                    if (ex.current > ex.goal) ex.current = ex.goal;
                 }
             });
             window.gameState.autoScale = document.getElementById('settingAutoScale').checked;
 
             recordTodayPercentage();
-            saveState();
+            window.saveState();
             renderAll();
             showNotification("SYSTEM AKTUALISIERT", "Deine Übungsziele wurden gespeichert.", "fa-sliders");
         }
@@ -1525,40 +1838,20 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            labels: { color: '#cbd5e1', font: { family: 'Orbitron', size: 11 } }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: ctx => `${ctx.parsed.y}% erreicht`
-                            }
-                        }
+                        legend: { labels: { color: '#cbd5e1', font: { family: 'Orbitron', size: 11 } } },
+                        tooltip: { callbacks: { label: ctx => `${ctx.parsed.y}% erreicht` } }
                     },
                     scales: {
                         x: {
-                            title: {
-                                display: true,
-                                text: 'Tage',
-                                color: '#94a3b8',
-                                font: { family: 'Orbitron', size: 11 }
-                            },
+                            title: { display: true, text: 'Tage', color: '#94a3b8', font: { family: 'Orbitron', size: 11 } },
                             ticks: { color: '#94a3b8', font: { family: 'Rajdhani', size: 12 } },
                             grid: { color: 'rgba(148, 163, 184, 0.1)' }
                         },
                         y: {
                             min: 0,
-                            max: 100,
-                            title: {
-                                display: true,
-                                text: 'Erreichte %',
-                                color: '#94a3b8',
-                                font: { family: 'Orbitron', size: 11 }
-                            },
-                            ticks: {
-                                color: '#94a3b8',
-                                stepSize: 20,
-                                callback: v => v + '%'
-                            },
+                            suggestedMax: 150,
+                            title: { display: true, text: 'Erreichte %', color: '#94a3b8', font: { family: 'Orbitron', size: 11 } },
+                            ticks: { color: '#94a3b8', stepSize: 25, callback: v => v + '%' },
                             grid: { color: 'rgba(148, 163, 184, 0.12)' }
                         }
                     }
@@ -1598,11 +1891,9 @@
             [7, 14, 30].forEach(d => {
                 const btn = document.getElementById(`range-btn-${d}`);
                 if (!btn) return;
-                if (d === days) {
-                    btn.className = "px-3 py-1.5 rounded text-xs font-display font-bold uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 transition";
-                } else {
-                    btn.className = "px-3 py-1.5 rounded text-xs font-display font-bold uppercase bg-slate-900 text-slate-400 border border-slate-700 hover:text-white transition";
-                }
+                btn.className = d === days
+                    ? "px-3 py-1.5 rounded text-xs font-display font-bold uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 transition"
+                    : "px-3 py-1.5 rounded text-xs font-display font-bold uppercase bg-slate-900 text-slate-400 border border-slate-700 hover:text-white transition";
             });
             updateCharts();
         }
@@ -1655,7 +1946,7 @@
 
             document.getElementById('newQuestTitle').value = '';
             closeNewQuestModal();
-            saveState();
+            window.saveState();
             renderCustomQuests();
             showNotification("NEUE QUEST", `"${title}" wurde dem Logbuch hinzugefügt.`, "fa-scroll");
         }
@@ -1671,16 +1962,47 @@
 
         function deleteCustomQuest(id) {
             window.gameState.customQuests = window.gameState.customQuests.filter(q => q.id !== id);
-            saveState();
+            window.saveState();
             renderCustomQuests();
         }
 
         function renderShadowArmy() {
             const grid = document.getElementById('shadowArmyGrid');
+            const expStatusEl = document.getElementById('activeExpeditionStatus');
+            const expActionEl = document.getElementById('expeditionActionArea');
             const lvl = window.gameState.level;
+            const exp = window.gameState.activeExpedition;
+            const todayPct = calculateDailyCompletionPct();
+
+            if (exp && expStatusEl && expActionEl) {
+                const remainingMs = Math.max(0, exp.endTime - Date.now());
+                const isReady = remainingMs === 0;
+                const hrs = Math.floor(remainingMs / 3600000);
+                const mins = Math.floor((remainingMs % 3600000) / 60000);
+
+                expStatusEl.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <span class="font-display font-bold text-purple-300">${exp.shadowName}</span> ist auf Expedition!
+                            <span class="text-xs text-slate-400 ml-2">(Belohnung: <strong class="text-amber-300">+${exp.rewardXp} XP</strong>)</span>
+                        </div>
+                        <div class="text-xs font-display">
+                            Status: ${isReady ? '<span class="text-emerald-400 font-bold">RÜCKKEHR BEREIT</span>' : `<span class="text-cyan-300">Noch ${hrs}h ${mins}m</span>`}
+                            // Heutiges Training: <span class="${todayPct >= 80 ? 'text-emerald-400' : 'text-rose-400'} font-bold">${todayPct}% / 80%</span>
+                        </div>
+                    </div>
+                `;
+                expActionEl.innerHTML = isReady
+                    ? `<button onclick="claimShadowExpedition()" class="px-4 py-2 rounded font-display font-bold text-xs uppercase bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">Expeditions-XP abholen (+${exp.rewardXp} XP)</button>`
+                    : `<span class="px-3 py-1.5 rounded text-xs font-display uppercase bg-purple-500/20 text-purple-300 border border-purple-500/40">Mission läuft...</span>`;
+            } else if (expStatusEl && expActionEl) {
+                expStatusEl.textContent = "Keine aktive Expedition. Wähle unten einen freigeschalteten Schatten aus, um ihn auf Mission zu schicken!";
+                expActionEl.innerHTML = "";
+            }
 
             grid.innerHTML = SHADOW_ARMY.map(sh => {
                 const unlocked = lvl >= sh.reqLevel;
+                const isOnMission = exp && exp.shadowId === sh.id;
                 return `
                 <div class="rounded-lg p-4 border ${unlocked ? 'bg-purple-950/25 border-purple-500/60 shadow-[0_0_15px_rgba(147,51,234,0.2)]' : 'bg-slate-950/60 border-slate-800 opacity-60'} flex flex-col items-center text-center transition">
                     <div class="w-14 h-14 rounded-full flex items-center justify-center mb-3 ${unlocked ? 'bg-purple-600/30 border-2 border-purple-400 text-purple-300 glow-text-purple' : 'bg-slate-900 border border-slate-700 text-slate-600'}">
@@ -1689,8 +2011,14 @@
                     <div class="font-display font-bold text-base ${unlocked ? 'text-white glow-text-purple' : 'text-slate-500'}">${sh.name}</div>
                     <div class="text-xs text-purple-300 font-semibold mt-0.5">${unlocked ? sh.title : 'Versiegelt'}</div>
                     <div class="mt-2 text-[11px] font-display px-2 py-0.5 rounded ${unlocked ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-900 text-slate-400'}">
-                        ${unlocked ? 'EXTRAHIERT ✓' : sh.desc}
+                        ${unlocked ? `EXTRAHIERT ✓ (+${sh.expXp} XP/Mission)` : sh.desc}
                     </div>
+                    ${unlocked ? `
+                        <button onclick="startShadowExpedition('${sh.id}')" ${exp ? 'disabled' : ''}
+                            class="mt-3 w-full py-1.5 rounded text-[11px] font-display font-bold uppercase tracking-wider ${isOnMission ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : (exp ? 'bg-slate-900 text-slate-600 cursor-not-allowed' : 'bg-purple-600/40 hover:bg-purple-600/60 text-purple-100 border border-purple-400/50')} transition">
+                            ${isOnMission ? 'Auf Expedition...' : 'Auf Expedition schicken'}
+                        </button>
+                    ` : ''}
                 </div>`;
             }).join('');
         }
@@ -1700,7 +2028,7 @@
             window.gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
             window.gameState.lastActiveDate = getTodayStr();
             recordTodayPercentage();
-            saveState();
+            window.saveState();
             renderAll();
             showNotification("SYSTEM RESET", "Alle Daten wurden zurückgesetzt.", "fa-rotate-left");
         }
@@ -1717,12 +2045,10 @@
             activeBtn.classList.remove('bg-slate-900/60', 'text-slate-400', 'border-transparent');
             activeBtn.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/50');
 
-            if (tabName === 'daily' || tabName === 'calendar') {
-                setTimeout(updateCharts, 50);
-            }
-            if (tabName === 'calendar') {
-                renderCalendar();
-            }
+            if (tabName === 'daily' || tabName === 'calendar') setTimeout(updateCharts, 50);
+            if (tabName === 'calendar') renderCalendar();
+            if (tabName === 'shadow') renderShadowArmy();
+            if (tabName === 'dungeons') renderRaidBoss();
         }
 
         function openNewQuestModal() {
@@ -1772,6 +2098,22 @@
                 const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
                 const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
                 document.getElementById('dailyCountdownDisplay').textContent = `${h}:${m}:${s}`;
+
+                // Live-Timer für Notfall-Quest
+                const sq = window.gameState.suddenQuest;
+                if (sq) {
+                    const rem = Math.max(0, sq.expiresAt - Date.now());
+                    if (rem === 0) {
+                        window.gameState.suddenQuest = null;
+                        window.saveState();
+                        renderSuddenQuest();
+                    } else {
+                        const mm = String(Math.floor(rem / 60000)).padStart(2, '0');
+                        const ss = String(Math.floor((rem % 60000) / 1000)).padStart(2, '0');
+                        const badge = document.getElementById('suddenQuestTimerBadge');
+                        if (badge) badge.textContent = `${mm}:${ss}`;
+                    }
+                }
             }, 1000);
         }
 
