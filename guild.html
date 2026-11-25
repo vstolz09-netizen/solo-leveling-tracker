@@ -151,9 +151,9 @@
                 <div class="text-xs text-slate-400 mt-0.5">Über alle aktiven Jäger</div>
             </div>
             <div class="system-panel rounded-lg p-4">
-                <div class="text-xs font-display uppercase text-slate-400">100% Tagesziel Heute</div>
-                <div id="kpiCompletedToday" class="font-display font-black text-2xl text-amber-400 mt-1">0 / 0</div>
-                <div class="text-xs text-slate-400 mt-0.5">Quests abgeschlossen</div>
+                <div class="text-xs font-display uppercase text-slate-400">Gilden-Raid-Schaden</div>
+                <div id="kpiTotalRaidDamage" class="font-display font-black text-2xl text-rose-400 mt-1">0 DMG</div>
+                <div id="kpiCompletedToday" class="text-xs text-slate-400 mt-0.5">0 / 0 Tagesziele 100%</div>
             </div>
         </section>
 
@@ -176,11 +176,12 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-4">
                     <div>
                         <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">ECHTZEIT-SYNCHRONISATION</span>
-                        <h2 class="font-display font-bold text-xl text-white mt-0.5">JÄGER-RANGLISTE & LIVE-TAGESFORTSCHRITT</h2>
+                        <h2 class="font-display font-bold text-xl text-white mt-0.5">JÄGER-RANGLISTE, RAID-SCHADEN & LIVE-FORTSCHRITT</h2>
                     </div>
                     <div class="flex items-center gap-2">
                         <select id="sortRankingSelect" onchange="renderAll()" class="bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-xs font-display text-cyan-300 focus:border-cyan-400">
                             <option value="level_xp">Sortieren: Level & XP</option>
+                            <option value="raid_damage">Sortieren: Gilden-Raid-Schaden</option>
                             <option value="today_pct">Sortieren: Tagesziel % (Heute)</option>
                             <option value="streak">Sortieren: Längste Serie</option>
                             <option value="total_stats">Sortieren: Gesamt-Stats</option>
@@ -201,7 +202,7 @@
                 <div class="lg:col-span-7 system-panel rounded-lg p-5 space-y-4">
                     <div class="border-b border-slate-800 pb-3">
                         <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">FORTSCHRITTS-VERGLEICH</span>
-                        <h3 class="font-display font-bold text-lg text-white">LEVEL, XP & TAGESZIEL (%) IM VERGLEICH</h3>
+                        <h3 class="font-display font-bold text-lg text-white">LEVEL & TAGESZIEL (%) IM VERGLEICH</h3>
                     </div>
                     <div class="relative h-80 w-full bg-slate-950/60 p-3 rounded-lg border border-slate-800">
                         <canvas id="huntersBarChart"></canvas>
@@ -435,7 +436,6 @@
             window.renderAll();
         });
 
-        // ECHTZEIT-LISTENER AUF ALLE BENUTZER IN "hunters"
         onSnapshot(collection(db, "hunters"), (snapshot) => {
             const list = [];
             snapshot.forEach((docSnap) => {
@@ -521,14 +521,13 @@
             return { rank: 'E', title: 'Anfänger-Jäger', color: 'text-cyan-300 border-cyan-400' };
         }
 
-        // Berechnet live das heutige Tagesziel in % für einen Benutzer
         function getHunterTodayPct(hunter) {
             const today = getTodayStr();
             const exercises = Array.isArray(hunter.dailyExercises) ? hunter.dailyExercises : [];
             if (hunter.lastActiveDate === today && exercises.length > 0) {
                 const sum = exercises.reduce((acc, ex) => {
                     const goal = ex.goal > 0 ? ex.goal : 1;
-                    return acc + Math.min(1, Math.max(0, (ex.current || 0) / goal));
+                    return acc + Math.min(1.5, Math.max(0, (ex.current || 0) / goal));
                 }, 0);
                 return Math.round((sum / exercises.length) * 100);
             }
@@ -536,6 +535,10 @@
                 return hunter.dailyHistory[today];
             }
             return 0;
+        }
+
+        function getHunterRaidDamage(hunter) {
+            return Number(hunter.myRaidDamage || 0);
         }
 
         function getTotalStats(hunter) {
@@ -548,7 +551,10 @@
             const copy = [...(window.allHunters || [])];
 
             copy.sort((a, b) => {
-                if (mode === 'today_pct') {
+                if (mode === 'raid_damage') {
+                    const diff = getHunterRaidDamage(b) - getHunterRaidDamage(a);
+                    if (diff !== 0) return diff;
+                } else if (mode === 'today_pct') {
                     const diff = getHunterTodayPct(b) - getHunterTodayPct(a);
                     if (diff !== 0) return diff;
                 } else if (mode === 'streak') {
@@ -585,17 +591,23 @@
 
                 let pctSum = 0;
                 let doneCount = 0;
+                let totalRaidDmg = 0;
+
                 sorted.forEach(h => {
                     const p = getHunterTodayPct(h);
                     pctSum += p;
                     if (p >= 100) doneCount++;
+                    totalRaidDmg += getHunterRaidDamage(h);
                 });
+
                 document.getElementById('kpiAvgTodayPct').textContent = `${Math.round(pctSum / sorted.length)}%`;
-                document.getElementById('kpiCompletedToday').textContent = `${doneCount} / ${sorted.length}`;
+                document.getElementById('kpiTotalRaidDamage').textContent = `${totalRaidDmg.toLocaleString('de-DE')} DMG`;
+                document.getElementById('kpiCompletedToday').textContent = `${doneCount} / ${sorted.length} Tagesziele 100%`;
             } else {
                 document.getElementById('kpiTopHunter').textContent = '-';
                 document.getElementById('kpiAvgTodayPct').textContent = '0%';
-                document.getElementById('kpiCompletedToday').textContent = '0 / 0';
+                document.getElementById('kpiTotalRaidDamage').textContent = '0 DMG';
+                document.getElementById('kpiCompletedToday').textContent = '0 / 0 Tagesziele 100%';
             }
         }
 
@@ -606,6 +618,8 @@
                 return;
             }
 
+            const maxRaidDmg = Math.max(1, ...sorted.map(h => getHunterRaidDamage(h)));
+
             container.innerHTML = sorted.map((h, idx) => {
                 const place = idx + 1;
                 const lvl = h.level || 1;
@@ -613,6 +627,8 @@
                 const reqXp = getRequiredXpForLevel(lvl);
                 const xpPct = Math.min(100, Math.round((xp / reqXp) * 100));
                 const todayPct = getHunterTodayPct(h);
+                const raidDmg = getHunterRaidDamage(h);
+                const raidSharePct = Math.min(100, Math.round((raidDmg / maxRaidDmg) * 100));
                 const rankInfo = getRankInfo(lvl);
                 const isMe = window.currentUserUid && h.uid === window.currentUserUid;
                 const stats = h.stats || { str: 10, agi: 10, vit: 10, int: 10, per: 10 };
@@ -626,7 +642,7 @@
                 <div class="bg-slate-950/75 border ${isMe ? 'border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.18)]' : 'border-slate-800'} rounded-lg p-4 transition">
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
                         <!-- Platz, Rang & Name -->
-                        <div class="lg:col-span-4 flex items-center gap-3 min-w-0">
+                        <div class="lg:col-span-3 flex items-center gap-3 min-w-0">
                             ${medalBadge}
                             <div class="w-11 h-11 rounded border ${rankInfo.color} bg-slate-900 flex flex-col items-center justify-center flex-shrink-0">
                                 <span class="text-[9px] font-display opacity-75">RANG</span>
@@ -637,24 +653,24 @@
                                     <span class="font-display font-bold text-base text-white truncate">${h.playerName || 'UNBEKANNT'}</span>
                                     ${isMe ? '<span class="text-[10px] font-display px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">DU</span>' : ''}
                                 </div>
-                                <div class="text-xs text-slate-400 flex items-center gap-3 mt-0.5">
+                                <div class="text-xs text-slate-400 flex items-center gap-2.5 mt-0.5">
                                     <span class="text-cyan-300 font-display font-bold">LVL ${lvl}</span>
-                                    <span class="text-amber-400"><i class="fa-solid fa-fire mr-1"></i>${h.streak || 0} Tage</span>
+                                    <span class="text-amber-400"><i class="fa-solid fa-fire mr-0.5"></i>${h.streak || 0}T</span>
                                     <span>Stats: ${getTotalStats(h)}</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- XP Balken -->
-                        <div class="lg:col-span-4">
+                        <div class="lg:col-span-3">
                             <div class="flex justify-between text-xs mb-1">
-                                <span class="text-slate-400 font-display">LEVEL-FORTSCHRITT</span>
-                                <span class="text-purple-300 font-display font-bold">${xp} / ${reqXp} XP (${xpPct}%)</span>
+                                <span class="text-slate-400 font-display">LEVEL-XP</span>
+                                <span class="text-purple-300 font-display font-bold">${xp}/${reqXp} (${xpPct}%)</span>
                             </div>
                             <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
                                 <div class="h-full bg-gradient-to-r from-purple-600 to-cyan-400 transition-all duration-500" style="width: ${xpPct}%"></div>
                             </div>
-                            <div class="flex gap-2 mt-1.5 text-[11px] font-display text-slate-400">
+                            <div class="flex gap-1.5 mt-1.5 text-[10px] font-display text-slate-400">
                                 <span>STR:${stats.str}</span>
                                 <span>AGI:${stats.agi}</span>
                                 <span>VIT:${stats.vit}</span>
@@ -663,20 +679,34 @@
                             </div>
                         </div>
 
+                        <!-- Gilden-Raid-Schaden -->
+                        <div class="lg:col-span-3">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-rose-400 font-display flex items-center gap-1">
+                                    <i class="fa-solid fa-skull-crossbones"></i> RAID-SCHADEN
+                                </span>
+                                <span class="font-display font-bold text-rose-300">${raidDmg.toLocaleString('de-DE')} DMG</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                                <div class="h-full bg-gradient-to-r from-rose-600 to-amber-500 transition-all duration-500" style="width: ${raidSharePct}%"></div>
+                            </div>
+                            <div class="text-[11px] text-slate-500 mt-1">Anteil am Top-Schaden: ${raidSharePct}%</div>
+                        </div>
+
                         <!-- Live Tagesziel % -->
-                        <div class="lg:col-span-4">
+                        <div class="lg:col-span-3">
                             <div class="flex justify-between text-xs mb-1">
                                 <span class="text-slate-400 font-display flex items-center gap-1.5">
                                     <span class="w-2 h-2 rounded-full ${todayPct >= 100 ? 'bg-emerald-400' : 'bg-cyan-400 animate-pulse'}"></span>
-                                    TAGESZIEL HEUTE (LIVE)
+                                    TAGESZIEL HEUTE
                                 </span>
                                 <span class="font-display font-bold ${todayPct >= 100 ? 'text-emerald-400' : 'text-cyan-300'}">${todayPct}%</span>
                             </div>
-                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
-                                <div class="h-full rounded-full transition-all duration-500 ${todayPct >= 100 ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-cyan-500'}" style="width: ${todayPct}%"></div>
+                            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                                <div class="h-full rounded-full transition-all duration-500 ${todayPct >= 100 ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-cyan-500'}" style="width: ${Math.min(100, todayPct)}%"></div>
                             </div>
                             <div class="flex justify-between items-center mt-1.5">
-                                <span class="text-[11px] text-slate-500">${(h.dailyExercises || []).length} Tagesübungen aktiv</span>
+                                <span class="text-[11px] text-slate-500">${(h.dailyExercises || []).length} Übungen</span>
                                 <button onclick="openManagerForHunter('${h.uid}')" class="text-[11px] font-display text-purple-300 hover:text-purple-200 underline">
                                     Quests verwalten →
                                 </button>
@@ -689,7 +719,7 @@
 
         function populateHunterSelectors(sorted) {
             const ids = ['radarHunterA', 'radarHunterB', 'targetHunterSelect'];
-            ids.forEach((selId, index) => {
+            ids.forEach((selId) => {
                 const sel = document.getElementById(selId);
                 if (!sel) return;
                 const prevVal = sel.value;
@@ -710,7 +740,6 @@
             const levels = sorted.map(h => h.level || 1);
             const todayPcts = sorted.map(h => getHunterTodayPct(h));
 
-            // 1. Balkendiagramm: Level & Tagesziel %
             const barCtx = document.getElementById('huntersBarChart');
             if (barCtx) {
                 const config = {
@@ -755,7 +784,7 @@
                                 type: 'linear',
                                 position: 'right',
                                 min: 0,
-                                max: 100,
+                                suggestedMax: 150,
                                 title: { display: true, text: 'Tagesziel %', color: '#00e5ff', font: { family: 'Orbitron', size: 10 } },
                                 ticks: { color: '#67e8f9', callback: v => v + '%' },
                                 grid: { drawOnChartArea: false }
@@ -771,7 +800,6 @@
                 }
             }
 
-            // 2. Radar-Chart: 1-vs-1 Stat-Vergleich
             const radarCtx = document.getElementById('huntersRadarChart');
             const uidA = document.getElementById('radarHunterA')?.value;
             const uidB = document.getElementById('radarHunterB')?.value;
@@ -828,7 +856,6 @@
                 }
             }
 
-            // 3. 7-Tage Linienvergleich
             const lineCtx = document.getElementById('huntersHistoryLineChart');
             if (lineCtx) {
                 const days = [];
@@ -871,7 +898,7 @@
                             x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148,163,184,0.1)' } },
                             y: {
                                 min: 0,
-                                max: 100,
+                                suggestedMax: 150,
                                 ticks: { color: '#94a3b8', callback: v => v + '%' },
                                 grid: { color: 'rgba(148,163,184,0.1)' }
                             }
@@ -888,7 +915,6 @@
             }
         }
 
-        // QUEST & ÜBUNGSVERWALTUNG FÜR EINZELNE BENUTZER
         function openManagerForHunter(uid) {
             switchTab('quest-manager');
             const sel = document.getElementById('targetHunterSelect');
