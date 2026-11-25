@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SYSTEM // Hunter Association & Live-Ranking</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        system: {
+                            bg: '#05070c',
+                            cyan: '#00e5ff',
+                            purple: '#9333ea',
+                            danger: '#ff2a5f',
+                            success: '#10b981',
+                            warning: '#f59e0b'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['"Orbitron"', 'sans-serif'],
+                        body: ['"Rajdhani"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #05070c;
+            background-image: 
+                radial-gradient(circle at 20% 0%, rgba(147, 51, 234, 0.1) 0%, transparent 45%),
+                radial-gradient(circle at 85% 15%, rgba(0, 229, 255, 0.08) 0%, transparent 50%),
+                linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+            color: #e2e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .system-panel {
+            background: rgba(11, 17, 30, 0.88);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 229, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.08), inset 0 0 15px rgba(0, 229, 255, 0.05);
+            position: relative;
+        }
+
+        .system-panel::before, .system-panel::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-color: #00e5ff;
+            border-style: solid;
+            pointer-events: none;
+        }
+        .system-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        .system-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+        .system-panel-purple {
+            border-color: rgba(168, 85, 247, 0.45);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.12), inset 0 0 15px rgba(147, 51, 234, 0.05);
+        }
+        .system-panel-purple::before, .system-panel-purple::after { border-color: #a855f7; }
+
+        .glow-text-cyan { text-shadow: 0 0 10px rgba(0, 229, 255, 0.6); }
+        .glow-text-purple { text-shadow: 0 0 10px rgba(168, 85, 247, 0.6); }
+
+        .tab-content { display: none; animation: fadeIn 0.25s ease-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-500/30 selection:text-cyan-200 pb-20">
+
+    <!-- TOP HEADER -->
+    <header class="sticky top-0 z-40 bg-[#05070c]/90 backdrop-blur-md border-b border-purple-500/30 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded border border-purple-400 bg-purple-950/60 flex items-center justify-center shadow-[0_0_12px_rgba(168,85,247,0.4)]">
+                    <i class="fa-solid fa-crown text-purple-300 text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-display font-bold text-lg tracking-wider text-white glow-text-purple">HUNTER ASSOCIATION</span>
+                        <span class="text-[10px] font-display uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> LIVE
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 tracking-wide" id="liveConnectionLabel">VERBINDE MIT FIRESTORE...</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <a href="index.html" class="flex items-center gap-2 px-3 py-1.5 rounded text-xs font-display tracking-wider uppercase bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/40 transition">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Mein Tracker</span>
+                </a>
+                <div id="adminUserBadge" class="hidden items-center gap-2 bg-slate-900/90 border border-emerald-500/40 px-3 py-1.5 rounded text-xs">
+                    <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                    <span id="adminUserEmail" class="text-slate-200 font-medium truncate max-w-[150px]">Eingeloggt</span>
+                    <button onclick="handleSignOut()" class="ml-1 text-rose-400 hover:text-rose-300" title="Abmelden">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+                <button id="openAuthBtn" onclick="openAuthModal()" class="flex items-center gap-2 px-3 py-1.5 rounded text-xs font-display tracking-wider uppercase bg-purple-600/25 hover:bg-purple-600/40 text-purple-200 border border-purple-400/50 transition">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Login</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 pt-6 space-y-6">
+
+        <!-- TOP KPI SUMMARY -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="system-panel rounded-lg p-4">
+                <div class="text-xs font-display uppercase text-slate-400">Registrierte Jäger</div>
+                <div id="kpiTotalHunters" class="font-display font-black text-2xl text-white mt-1">0</div>
+                <div class="text-xs text-cyan-400 mt-0.5">Live aus Firestore</div>
+            </div>
+            <div class="system-panel system-panel-purple rounded-lg p-4">
+                <div class="text-xs font-display uppercase text-slate-400">Platz #1 Jäger</div>
+                <div id="kpiTopHunter" class="font-display font-bold text-xl text-purple-300 truncate mt-1">-</div>
+                <div id="kpiTopHunterSub" class="text-xs text-slate-400 mt-0.5">Level 1 // Rang E</div>
+            </div>
+            <div class="system-panel rounded-lg p-4">
+                <div class="text-xs font-display uppercase text-slate-400">Ø Tagesziel Heute</div>
+                <div id="kpiAvgTodayPct" class="font-display font-black text-2xl text-emerald-400 mt-1">0%</div>
+                <div class="text-xs text-slate-400 mt-0.5">Über alle aktiven Jäger</div>
+            </div>
+            <div class="system-panel rounded-lg p-4">
+                <div class="text-xs font-display uppercase text-slate-400">100% Tagesziel Heute</div>
+                <div id="kpiCompletedToday" class="font-display font-black text-2xl text-amber-400 mt-1">0 / 0</div>
+                <div class="text-xs text-slate-400 mt-0.5">Quests abgeschlossen</div>
+            </div>
+        </section>
+
+        <!-- NAVIGATION TABS -->
+        <nav class="flex overflow-x-auto gap-2 border-b border-slate-800 pb-2">
+            <button onclick="switchTab('ranking')" id="tab-btn-ranking" class="tab-btn active px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 transition whitespace-nowrap">
+                <i class="fa-solid fa-trophy mr-1.5"></i>Live-Ranking & Tagesziele
+            </button>
+            <button onclick="switchTab('charts')" id="tab-btn-charts" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
+                <i class="fa-solid fa-chart-column mr-1.5"></i>Grafischer Vergleich
+            </button>
+            <button onclick="switchTab('quest-manager')" id="tab-btn-quest-manager" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
+                <i class="fa-solid fa-scroll mr-1.5"></i>Quests & Übungen verwalten
+            </button>
+        </nav>
+
+        <!-- TAB 1: LIVE RANKING -->
+        <section id="tab-ranking" class="tab-content active space-y-4">
+            <div class="system-panel rounded-lg p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-4">
+                    <div>
+                        <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">ECHTZEIT-SYNCHRONISATION</span>
+                        <h2 class="font-display font-bold text-xl text-white mt-0.5">JÄGER-RANGLISTE & LIVE-TAGESFORTSCHRITT</h2>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <select id="sortRankingSelect" onchange="renderAll()" class="bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-xs font-display text-cyan-300 focus:border-cyan-400">
+                            <option value="level_xp">Sortieren: Level & XP</option>
+                            <option value="today_pct">Sortieren: Tagesziel % (Heute)</option>
+                            <option value="streak">Sortieren: Längste Serie</option>
+                            <option value="total_stats">Sortieren: Gesamt-Stats</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="rankingListContainer" class="space-y-3">
+                    <div class="text-center py-10 text-slate-400 font-display text-sm">Lade Jäger-Daten aus Firestore...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CHARTS & COMPARISON -->
+        <section id="tab-charts" class="tab-content space-y-5">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                <!-- Level & XP Bar Chart -->
+                <div class="lg:col-span-7 system-panel rounded-lg p-5 space-y-4">
+                    <div class="border-b border-slate-800 pb-3">
+                        <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">FORTSCHRITTS-VERGLEICH</span>
+                        <h3 class="font-display font-bold text-lg text-white">LEVEL, XP & TAGESZIEL (%) IM VERGLEICH</h3>
+                    </div>
+                    <div class="relative h-80 w-full bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                        <canvas id="huntersBarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Radar Stat Comparison -->
+                <div class="lg:col-span-5 system-panel system-panel-purple rounded-lg p-5 space-y-4">
+                    <div class="border-b border-slate-800 pb-3">
+                        <span class="text-xs font-display text-purple-400 tracking-widest uppercase">ATRIBUT-ANALYSE</span>
+                        <h3 class="font-display font-bold text-lg text-white">1-VS-1 STAT-VERGLEICH (RADAR)</h3>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[11px] font-display uppercase text-cyan-300 mb-1">Jäger 1 (Cyan)</label>
+                            <select id="radarHunterA" onchange="updateCharts()" class="w-full bg-slate-950 border border-cyan-500/40 rounded px-2.5 py-1.5 text-xs font-display text-white"></select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-display uppercase text-purple-300 mb-1">Jäger 2 (Lila)</label>
+                            <select id="radarHunterB" onchange="updateCharts()" class="w-full bg-slate-950 border border-purple-500/40 rounded px-2.5 py-1.5 text-xs font-display text-white"></select>
+                        </div>
+                    </div>
+
+                    <div class="relative h-64 w-full bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                        <canvas id="huntersRadarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7-Tage Verlauf aller Benutzer -->
+            <div class="system-panel rounded-lg p-5 space-y-4">
+                <div class="border-b border-slate-800 pb-3">
+                    <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">AKTIVITÄTS-VERLAUF</span>
+                    <h3 class="font-display font-bold text-lg text-white">TAGESZIEL-QUOTE (%) DER LETZTEN 7 TAGE PRO JÄGER</h3>
+                </div>
+                <div class="relative h-72 w-full bg-slate-950/60 p-3 rounded-lg border border-slate-800">
+                    <canvas id="huntersHistoryLineChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: QUEST & EXERCISE CREATOR FOR ANY HUNTER -->
+        <section id="tab-quest-manager" class="tab-content space-y-5">
+            <div class="system-panel system-panel-purple rounded-lg p-5 space-y-5">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                    <div>
+                        <span class="text-xs font-display text-purple-400 tracking-widest uppercase">SYSTEM-ADMINISTRATOR // QUEST-ZUWEISUNG</span>
+                        <h2 class="font-display font-bold text-xl text-white mt-0.5">QUESTS & TAGESÜBUNGEN FÜR BENUTZER ERSTELLEN</h2>
+                    </div>
+                    <div class="w-full md:w-72">
+                        <label class="block text-[11px] font-display uppercase text-slate-400 mb-1">Ziel-Jäger auswählen</label>
+                        <select id="targetHunterSelect" onchange="renderManagedHunterDetails()" class="w-full bg-slate-950 border border-purple-400/60 rounded px-3 py-2 text-sm font-display text-white"></select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Formular: Neue Dungeon-Quest zuweisen -->
+                    <div class="bg-slate-950/70 border border-purple-500/30 rounded-lg p-4 space-y-3">
+                        <h3 class="font-display font-bold text-base text-purple-300 flex items-center gap-2">
+                            <i class="fa-solid fa-dungeon"></i> Neue Dungeon-Quest zuweisen
+                        </h3>
+                        <div>
+                            <label class="block text-xs font-display uppercase text-slate-400 mb-1">Quest-Titel</label>
+                            <input type="text" id="assignQuestTitle" placeholder="z. B. 100 Liegestütze Extra-Challenge" class="w-full bg-slate-900 border border-slate-700 focus:border-purple-400 rounded px-3 py-2 text-sm text-white">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-display uppercase text-slate-400 mb-1">Rang & XP</label>
+                                <select id="assignQuestRank" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm font-display text-white">
+                                    <option value="E">E-Rang (+30 XP)</option>
+                                    <option value="D">D-Rang (+60 XP)</option>
+                                    <option value="C">C-Rang (+100 XP)</option>
+                                    <option value="B">B-Rang (+180 XP)</option>
+                                    <option value="A">A-Rang (+300 XP)</option>
+                                    <option value="S">S-Rang (+500 XP)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-display uppercase text-slate-400 mb-1">Belohnungs-Stat</label>
+                                <select id="assignQuestStat" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm font-display text-white">
+                                    <option value="str">STR (Stärke)</option>
+                                    <option value="agi">AGI (Agilität)</option>
+                                    <option value="vit">VIT (Vitalität)</option>
+                                    <option value="int">INT (Intelligenz)</option>
+                                    <option value="per">PER (Wahrnehmung)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="assignQuestToHunter()" class="w-full py-2.5 rounded font-display font-bold text-xs uppercase tracking-wider bg-purple-600 hover:bg-purple-500 text-white shadow-[0_0_12px_rgba(147,51,234,0.4)] transition">
+                            <i class="fa-solid fa-paper-plane mr-1.5"></i>Dungeon-Quest an Jäger senden
+                        </button>
+                    </div>
+
+                    <!-- Formular: Neue Tagesübung hinzufügen -->
+                    <div class="bg-slate-950/70 border border-cyan-500/30 rounded-lg p-4 space-y-3">
+                        <h3 class="font-display font-bold text-base text-cyan-300 flex items-center gap-2">
+                            <i class="fa-solid fa-dumbbell"></i> Neue Tagesübung (Daily Quest) hinzufügen
+                        </h3>
+                        <div>
+                            <label class="block text-xs font-display uppercase text-slate-400 mb-1">Übungsname</label>
+                            <input type="text" id="assignExLabel" placeholder="z. B. Klimmzüge oder Plank" class="w-full bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded px-3 py-2 text-sm text-white">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-xs font-display uppercase text-slate-400 mb-1">Tagesziel</label>
+                                <input type="number" id="assignExGoal" min="0.5" step="0.5" value="25" class="w-full bg-slate-900 border border-slate-700 rounded px-3 py-2 text-sm font-display text-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-display uppercase text-slate-400 mb-1">Einheit</label>
+                                <select id="assignExUnit" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-2 text-sm font-display text-white">
+                                    <option value="Wdh.">Wdh.</option>
+                                    <option value="km">km</option>
+                                    <option value="Min.">Min.</option>
+                                    <option value="Sek.">Sek.</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-display uppercase text-slate-400 mb-1">Icon</label>
+                                <select id="assignExIcon" class="w-full bg-slate-900 border border-slate-700 rounded px-2.5 py-2 text-sm font-display text-white">
+                                    <option value="fa-dumbbell">Hantel</option>
+                                    <option value="fa-person-running">Laufen</option>
+                                    <option value="fa-bolt">Tempo</option>
+                                    <option value="fa-fire">Core</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="assignDailyExerciseToHunter()" class="w-full py-2.5 rounded font-display font-bold text-xs uppercase tracking-wider bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-[0_0_12px_rgba(0,229,255,0.4)] transition">
+                            <i class="fa-solid fa-plus mr-1.5"></i>Tagesübung zuweisen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Aktuelle Quests & Tagesübungen des gewählten Benutzers -->
+                <div id="managedHunterLists" class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+                    <!-- Dynamisch gerendert -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- NOTIFICATION TOAST -->
+    <div id="systemNotification" class="fixed bottom-5 right-5 z-50 max-w-sm w-full pointer-events-none transform translate-y-10 opacity-0 transition-all duration-300">
+        <div class="system-panel rounded-lg p-4 bg-[#070b14]/95 border-cyan-400 shadow-[0_0_25px_rgba(0,229,255,0.3)]">
+            <div class="flex items-center gap-3">
+                <i id="notifIcon" class="fa-solid fa-circle-info text-cyan-400 text-xl"></i>
+                <div>
+                    <div id="notifTitle" class="font-display font-bold text-xs tracking-wider uppercase text-cyan-300">SYSTEM</div>
+                    <div id="notifMessage" class="text-sm text-white mt-0.5">Aktion ausgeführt.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="authModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="system-panel rounded-lg max-w-md w-full p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-display font-bold text-lg text-white">HUNTER-LOGIN</h3>
+                <button onclick="closeAuthModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="space-y-3">
+                <input type="email" id="authEmail" placeholder="E-Mail-Adresse" class="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white">
+                <input type="password" id="authPassword" placeholder="Passwort" class="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-white">
+                <p id="authErrorMsg" class="text-xs text-rose-400 hidden"></p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="handleEmailSignIn()" class="flex-1 py-2.5 rounded text-xs font-display font-bold uppercase bg-cyan-500 hover:bg-cyan-400 text-slate-950">Anmelden</button>
+            </div>
+            <button onclick="handleGoogleSignIn()" class="w-full py-2.5 rounded text-xs font-display font-bold uppercase bg-white hover:bg-slate-200 text-slate-900 flex items-center justify-center gap-2">
+                <i class="fa-brands fa-google text-rose-600"></i> Mit Google anmelden
+            </button>
+        </div>
+    </div>
+
+    <!-- FIREBASE MODULE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            signInWithPopup,
+            GoogleAuthProvider,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            onSnapshot,
+            updateDoc
+        } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBH9PYyoozlpn-uGfNntqu0Tiak8hRU80A",
+            authDomain: "solo-leveling-tracker-6f8a2.firebaseapp.com",
+            projectId: "solo-leveling-tracker-6f8a2",
+            storageBucket: "solo-leveling-tracker-6f8a2.firebasestorage.app",
+            messagingSenderId: "259841552720",
+            appId: "1:259841552720:web:8291a77bc26541ca6b7c55",
+            measurementId: "G-9NVEZV6CG8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        window.allHunters = [];
+        window.currentUserUid = null;
+
+        onAuthStateChanged(auth, (user) => {
+            const badge = document.getElementById('adminUserBadge');
+            const emailEl = document.getElementById('adminUserEmail');
+            const loginBtn = document.getElementById('openAuthBtn');
+
+            if (user) {
+                window.currentUserUid = user.uid;
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+                emailEl.textContent = user.email || user.displayName || 'Jäger';
+                loginBtn.classList.add('hidden');
+            } else {
+                window.currentUserUid = null;
+                badge.classList.add('hidden');
+                badge.classList.remove('flex');
+                loginBtn.classList.remove('hidden');
+            }
+            window.renderAll();
+        });
+
+        // ECHTZEIT-LISTENER AUF ALLE BENUTZER IN "hunters"
+        onSnapshot(collection(db, "hunters"), (snapshot) => {
+            const list = [];
+            snapshot.forEach((docSnap) => {
+                list.push({
+                    uid: docSnap.id,
+                    ...docSnap.data()
+                });
+            });
+            window.allHunters = list;
+            const statusEl = document.getElementById('liveConnectionLabel');
+            statusEl.textContent = `ECHTZEIT-DATENBANK AKTIV // ${list.length} JÄGER VERBUNDEN`;
+            statusEl.className = "text-xs text-emerald-400 tracking-wide font-semibold";
+            window.renderAll();
+        }, (err) => {
+            console.error("Firestore Snapshot Error:", err);
+            const statusEl = document.getElementById('liveConnectionLabel');
+            statusEl.textContent = "FEHLER BEIM LADEN DER DATENBANK (PRÜFE FIRESTORE RULES)";
+            statusEl.className = "text-xs text-rose-400 tracking-wide font-semibold";
+        });
+
+        window.updateHunterDoc = async function(uid, payload) {
+            try {
+                await updateDoc(doc(db, "hunters", uid), {
+                    ...payload,
+                    updatedAt: new Date().toISOString()
+                });
+                window.showNotification("DATENBANK AKTUALISIERT", "Änderung wurde live für den Jäger gespeichert.", "fa-check-circle");
+            } catch (err) {
+                console.error(err);
+                window.showNotification("FEHLER", err.message || "Speichern fehlgeschlagen.", "fa-triangle-exclamation");
+            }
+        };
+
+        window.handleEmailSignIn = async function() {
+            const email = document.getElementById('authEmail').value.trim();
+            const pass = document.getElementById('authPassword').value;
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.closeAuthModal();
+            } catch (e) {
+                const err = document.getElementById('authErrorMsg');
+                err.textContent = e.message;
+                err.classList.remove('hidden');
+            }
+        };
+
+        window.handleGoogleSignIn = async function() {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                window.closeAuthModal();
+            } catch (e) {
+                const err = document.getElementById('authErrorMsg');
+                err.textContent = e.message;
+                err.classList.remove('hidden');
+            }
+        };
+
+        window.handleSignOut = async function() {
+            await signOut(auth);
+        };
+    </script>
+
+    <!-- UI, RANKING, CHARTS & QUEST MANAGEMENT LOGIC -->
+    <script>
+        let barChartInstance = null;
+        let radarChartInstance = null;
+        let lineChartInstance = null;
+
+        function getTodayStr() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function getRequiredXpForLevel(lvl) {
+            return Math.floor(100 * Math.pow(1.25, (lvl || 1) - 1));
+        }
+
+        function getRankInfo(lvl) {
+            if (lvl >= 80) return { rank: 'S', title: 'Schattenmonarch', color: 'text-rose-400 border-rose-500' };
+            if (lvl >= 55) return { rank: 'A', title: 'Elite-Jäger', color: 'text-amber-400 border-amber-500' };
+            if (lvl >= 35) return { rank: 'B', title: 'Veteran', color: 'text-purple-400 border-purple-500' };
+            if (lvl >= 20) return { rank: 'C', title: 'Kämpfer', color: 'text-blue-400 border-blue-500' };
+            if (lvl >= 10) return { rank: 'D', title: 'Erwachter Jäger', color: 'text-emerald-400 border-emerald-500' };
+            return { rank: 'E', title: 'Anfänger-Jäger', color: 'text-cyan-300 border-cyan-400' };
+        }
+
+        // Berechnet live das heutige Tagesziel in % für einen Benutzer
+        function getHunterTodayPct(hunter) {
+            const today = getTodayStr();
+            const exercises = Array.isArray(hunter.dailyExercises) ? hunter.dailyExercises : [];
+            if (hunter.lastActiveDate === today && exercises.length > 0) {
+                const sum = exercises.reduce((acc, ex) => {
+                    const goal = ex.goal > 0 ? ex.goal : 1;
+                    return acc + Math.min(1, Math.max(0, (ex.current || 0) / goal));
+                }, 0);
+                return Math.round((sum / exercises.length) * 100);
+            }
+            if (hunter.dailyHistory && typeof hunter.dailyHistory[today] === 'number') {
+                return hunter.dailyHistory[today];
+            }
+            return 0;
+        }
+
+        function getTotalStats(hunter) {
+            const s = hunter.stats || { str: 10, agi: 10, vit: 10, int: 10, per: 10 };
+            return (s.str || 0) + (s.agi || 0) + (s.vit || 0) + (s.int || 0) + (s.per || 0);
+        }
+
+        function getSortedHunters() {
+            const mode = document.getElementById('sortRankingSelect')?.value || 'level_xp';
+            const copy = [...(window.allHunters || [])];
+
+            copy.sort((a, b) => {
+                if (mode === 'today_pct') {
+                    const diff = getHunterTodayPct(b) - getHunterTodayPct(a);
+                    if (diff !== 0) return diff;
+                } else if (mode === 'streak') {
+                    const diff = (b.streak || 0) - (a.streak || 0);
+                    if (diff !== 0) return diff;
+                } else if (mode === 'total_stats') {
+                    const diff = getTotalStats(b) - getTotalStats(a);
+                    if (diff !== 0) return diff;
+                }
+                const lvlDiff = (b.level || 1) - (a.level || 1);
+                if (lvlDiff !== 0) return lvlDiff;
+                return (b.xp || 0) - (a.xp || 0);
+            });
+            return copy;
+        }
+
+        window.renderAll = function() {
+            const sorted = getSortedHunters();
+            updateKpis(sorted);
+            renderRankingList(sorted);
+            populateHunterSelectors(sorted);
+            renderManagedHunterDetails();
+            updateCharts();
+        };
+
+        function updateKpis(sorted) {
+            document.getElementById('kpiTotalHunters').textContent = sorted.length;
+
+            if (sorted.length > 0) {
+                const top = sorted[0];
+                const rInfo = getRankInfo(top.level || 1);
+                document.getElementById('kpiTopHunter').textContent = top.playerName || 'UNBEKANNT';
+                document.getElementById('kpiTopHunterSub').textContent = `Level ${top.level || 1} // Rang ${rInfo.rank} (${top.xp || 0} XP)`;
+
+                let pctSum = 0;
+                let doneCount = 0;
+                sorted.forEach(h => {
+                    const p = getHunterTodayPct(h);
+                    pctSum += p;
+                    if (p >= 100) doneCount++;
+                });
+                document.getElementById('kpiAvgTodayPct').textContent = `${Math.round(pctSum / sorted.length)}%`;
+                document.getElementById('kpiCompletedToday').textContent = `${doneCount} / ${sorted.length}`;
+            } else {
+                document.getElementById('kpiTopHunter').textContent = '-';
+                document.getElementById('kpiAvgTodayPct').textContent = '0%';
+                document.getElementById('kpiCompletedToday').textContent = '0 / 0';
+            }
+        }
+
+        function renderRankingList(sorted) {
+            const container = document.getElementById('rankingListContainer');
+            if (!sorted.length) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400">Noch keine Jäger in der Datenbank gefunden.</div>`;
+                return;
+            }
+
+            container.innerHTML = sorted.map((h, idx) => {
+                const place = idx + 1;
+                const lvl = h.level || 1;
+                const xp = h.xp || 0;
+                const reqXp = getRequiredXpForLevel(lvl);
+                const xpPct = Math.min(100, Math.round((xp / reqXp) * 100));
+                const todayPct = getHunterTodayPct(h);
+                const rankInfo = getRankInfo(lvl);
+                const isMe = window.currentUserUid && h.uid === window.currentUserUid;
+                const stats = h.stats || { str: 10, agi: 10, vit: 10, int: 10, per: 10 };
+
+                let medalBadge = `<span class="w-8 h-8 rounded bg-slate-900 border border-slate-700 flex items-center justify-center font-display font-bold text-slate-300">#${place}</span>`;
+                if (place === 1) medalBadge = `<span class="w-8 h-8 rounded bg-amber-500/20 border border-amber-400 flex items-center justify-center font-display font-black text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.4)]">#1</span>`;
+                if (place === 2) medalBadge = `<span class="w-8 h-8 rounded bg-slate-300/20 border border-slate-300 flex items-center justify-center font-display font-bold text-slate-200">#2</span>`;
+                if (place === 3) medalBadge = `<span class="w-8 h-8 rounded bg-orange-700/30 border border-orange-500 flex items-center justify-center font-display font-bold text-orange-300">#3</span>`;
+
+                return `
+                <div class="bg-slate-950/75 border ${isMe ? 'border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.18)]' : 'border-slate-800'} rounded-lg p-4 transition">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+                        <!-- Platz, Rang & Name -->
+                        <div class="lg:col-span-4 flex items-center gap-3 min-w-0">
+                            ${medalBadge}
+                            <div class="w-11 h-11 rounded border ${rankInfo.color} bg-slate-900 flex flex-col items-center justify-center flex-shrink-0">
+                                <span class="text-[9px] font-display opacity-75">RANG</span>
+                                <span class="font-display font-black text-lg leading-none">${rankInfo.rank}</span>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-display font-bold text-base text-white truncate">${h.playerName || 'UNBEKANNT'}</span>
+                                    ${isMe ? '<span class="text-[10px] font-display px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">DU</span>' : ''}
+                                </div>
+                                <div class="text-xs text-slate-400 flex items-center gap-3 mt-0.5">
+                                    <span class="text-cyan-300 font-display font-bold">LVL ${lvl}</span>
+                                    <span class="text-amber-400"><i class="fa-solid fa-fire mr-1"></i>${h.streak || 0} Tage</span>
+                                    <span>Stats: ${getTotalStats(h)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- XP Balken -->
+                        <div class="lg:col-span-4">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-400 font-display">LEVEL-FORTSCHRITT</span>
+                                <span class="text-purple-300 font-display font-bold">${xp} / ${reqXp} XP (${xpPct}%)</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                                <div class="h-full bg-gradient-to-r from-purple-600 to-cyan-400 transition-all duration-500" style="width: ${xpPct}%"></div>
+                            </div>
+                            <div class="flex gap-2 mt-1.5 text-[11px] font-display text-slate-400">
+                                <span>STR:${stats.str}</span>
+                                <span>AGI:${stats.agi}</span>
+                                <span>VIT:${stats.vit}</span>
+                                <span>INT:${stats.int}</span>
+                                <span>PER:${stats.per}</span>
+                            </div>
+                        </div>
+
+                        <!-- Live Tagesziel % -->
+                        <div class="lg:col-span-4">
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-400 font-display flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full ${todayPct >= 100 ? 'bg-emerald-400' : 'bg-cyan-400 animate-pulse'}"></span>
+                                    TAGESZIEL HEUTE (LIVE)
+                                </span>
+                                <span class="font-display font-bold ${todayPct >= 100 ? 'text-emerald-400' : 'text-cyan-300'}">${todayPct}%</span>
+                            </div>
+                            <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
+                                <div class="h-full rounded-full transition-all duration-500 ${todayPct >= 100 ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-cyan-500'}" style="width: ${todayPct}%"></div>
+                            </div>
+                            <div class="flex justify-between items-center mt-1.5">
+                                <span class="text-[11px] text-slate-500">${(h.dailyExercises || []).length} Tagesübungen aktiv</span>
+                                <button onclick="openManagerForHunter('${h.uid}')" class="text-[11px] font-display text-purple-300 hover:text-purple-200 underline">
+                                    Quests verwalten →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function populateHunterSelectors(sorted) {
+            const ids = ['radarHunterA', 'radarHunterB', 'targetHunterSelect'];
+            ids.forEach((selId, index) => {
+                const sel = document.getElementById(selId);
+                if (!sel) return;
+                const prevVal = sel.value;
+                sel.innerHTML = sorted.map(h => `<option value="${h.uid}">${h.playerName || 'Unbekannt'} (Lvl ${h.level || 1})</option>`).join('');
+                if (prevVal && sorted.some(h => h.uid === prevVal)) {
+                    sel.value = prevVal;
+                } else if (selId === 'radarHunterB' && sorted.length > 1) {
+                    sel.value = sorted[1].uid;
+                }
+            });
+        }
+
+        function updateCharts() {
+            const sorted = getSortedHunters();
+            if (!sorted.length) return;
+
+            const labels = sorted.map(h => h.playerName || 'Unbekannt');
+            const levels = sorted.map(h => h.level || 1);
+            const todayPcts = sorted.map(h => getHunterTodayPct(h));
+
+            // 1. Balkendiagramm: Level & Tagesziel %
+            const barCtx = document.getElementById('huntersBarChart');
+            if (barCtx) {
+                const config = {
+                    type: 'bar',
+                    data: {
+                        labels,
+                        datasets: [
+                            {
+                                label: 'Level',
+                                data: levels,
+                                backgroundColor: 'rgba(168, 85, 247, 0.7)',
+                                borderColor: '#a855f7',
+                                borderWidth: 1.5,
+                                yAxisID: 'y'
+                            },
+                            {
+                                label: 'Tagesziel Heute (%)',
+                                data: todayPcts,
+                                backgroundColor: 'rgba(0, 229, 255, 0.55)',
+                                borderColor: '#00e5ff',
+                                borderWidth: 1.5,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: '#e2e8f0', font: { family: 'Orbitron', size: 11 } } }
+                        },
+                        scales: {
+                            x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148,163,184,0.1)' } },
+                            y: {
+                                type: 'linear',
+                                position: 'left',
+                                title: { display: true, text: 'Level', color: '#a855f7', font: { family: 'Orbitron', size: 10 } },
+                                ticks: { color: '#c084fc', precision: 0 },
+                                grid: { color: 'rgba(148,163,184,0.1)' }
+                            },
+                            y1: {
+                                type: 'linear',
+                                position: 'right',
+                                min: 0,
+                                max: 100,
+                                title: { display: true, text: 'Tagesziel %', color: '#00e5ff', font: { family: 'Orbitron', size: 10 } },
+                                ticks: { color: '#67e8f9', callback: v => v + '%' },
+                                grid: { drawOnChartArea: false }
+                            }
+                        }
+                    }
+                };
+                if (barChartInstance) {
+                    barChartInstance.data = config.data;
+                    barChartInstance.update();
+                } else {
+                    barChartInstance = new Chart(barCtx, config);
+                }
+            }
+
+            // 2. Radar-Chart: 1-vs-1 Stat-Vergleich
+            const radarCtx = document.getElementById('huntersRadarChart');
+            const uidA = document.getElementById('radarHunterA')?.value;
+            const uidB = document.getElementById('radarHunterB')?.value;
+            const hunterA = sorted.find(h => h.uid === uidA) || sorted[0];
+            const hunterB = sorted.find(h => h.uid === uidB) || sorted[1] || sorted[0];
+
+            if (radarCtx && hunterA) {
+                const sA = hunterA.stats || { str: 10, agi: 10, vit: 10, int: 10, per: 10 };
+                const sB = hunterB.stats || { str: 10, agi: 10, vit: 10, int: 10, per: 10 };
+
+                const radarConfig = {
+                    type: 'radar',
+                    data: {
+                        labels: ['STR', 'AGI', 'VIT', 'INT', 'PER'],
+                        datasets: [
+                            {
+                                label: hunterA.playerName || 'Jäger 1',
+                                data: [sA.str, sA.agi, sA.vit, sA.int, sA.per],
+                                borderColor: '#00e5ff',
+                                backgroundColor: 'rgba(0, 229, 255, 0.2)',
+                                pointBackgroundColor: '#00e5ff'
+                            },
+                            {
+                                label: hunterB.playerName || 'Jäger 2',
+                                data: [sB.str, sB.agi, sB.vit, sB.int, sB.per],
+                                borderColor: '#a855f7',
+                                backgroundColor: 'rgba(168, 85, 247, 0.2)',
+                                pointBackgroundColor: '#a855f7'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: '#e2e8f0', font: { family: 'Orbitron', size: 10 } } }
+                        },
+                        scales: {
+                            r: {
+                                angleLines: { color: 'rgba(148,163,184,0.2)' },
+                                grid: { color: 'rgba(148,163,184,0.2)' },
+                                pointLabels: { color: '#e2e8f0', font: { family: 'Orbitron', size: 11 } },
+                                ticks: { display: false }
+                            }
+                        }
+                    }
+                };
+
+                if (radarChartInstance) {
+                    radarChartInstance.data = radarConfig.data;
+                    radarChartInstance.update();
+                } else {
+                    radarChartInstance = new Chart(radarCtx, radarConfig);
+                }
+            }
+
+            // 3. 7-Tage Linienvergleich
+            const lineCtx = document.getElementById('huntersHistoryLineChart');
+            if (lineCtx) {
+                const days = [];
+                const isoList = [];
+                const now = new Date();
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date(now);
+                    d.setDate(now.getDate() - i);
+                    isoList.push(d.toISOString().split('T')[0]);
+                    days.push(d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' }));
+                }
+
+                const palette = ['#00e5ff', '#a855f7', '#10b981', '#f59e0b', '#f43f5e', '#3b82f6'];
+                const datasets = sorted.slice(0, 6).map((h, idx) => {
+                    const color = palette[idx % palette.length];
+                    const data = isoList.map(iso => {
+                        if (iso === getTodayStr()) return getHunterTodayPct(h);
+                        return (h.dailyHistory && typeof h.dailyHistory[iso] === 'number') ? h.dailyHistory[iso] : 0;
+                    });
+                    return {
+                        label: h.playerName || 'Jäger',
+                        data,
+                        borderColor: color,
+                        backgroundColor: color,
+                        tension: 0.25,
+                        borderWidth: 2
+                    };
+                });
+
+                const lineConfig = {
+                    type: 'line',
+                    data: { labels: days, datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: '#e2e8f0', font: { family: 'Orbitron', size: 11 } } }
+                        },
+                        scales: {
+                            x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(148,163,184,0.1)' } },
+                            y: {
+                                min: 0,
+                                max: 100,
+                                ticks: { color: '#94a3b8', callback: v => v + '%' },
+                                grid: { color: 'rgba(148,163,184,0.1)' }
+                            }
+                        }
+                    }
+                };
+
+                if (lineChartInstance) {
+                    lineChartInstance.data = lineConfig.data;
+                    lineChartInstance.update();
+                } else {
+                    lineChartInstance = new Chart(lineCtx, lineConfig);
+                }
+            }
+        }
+
+        // QUEST & ÜBUNGSVERWALTUNG FÜR EINZELNE BENUTZER
+        function openManagerForHunter(uid) {
+            switchTab('quest-manager');
+            const sel = document.getElementById('targetHunterSelect');
+            if (sel) sel.value = uid;
+            renderManagedHunterDetails();
+        }
+
+        function renderManagedHunterDetails() {
+            const container = document.getElementById('managedHunterLists');
+            const uid = document.getElementById('targetHunterSelect')?.value;
+            const hunter = (window.allHunters || []).find(h => h.uid === uid);
+
+            if (!hunter || !container) {
+                if (container) container.innerHTML = '';
+                return;
+            }
+
+            const quests = Array.isArray(hunter.customQuests) ? hunter.customQuests : [];
+            const exercises = Array.isArray(hunter.dailyExercises) ? hunter.dailyExercises : [];
+
+            container.innerHTML = `
+                <div class="bg-slate-950/70 border border-slate-800 rounded-lg p-4 space-y-2.5">
+                    <div class="font-display font-bold text-sm text-purple-300 uppercase">Dungeon-Quests von ${hunter.playerName} (${quests.length})</div>
+                    ${quests.length ? quests.map(q => `
+                        <div class="flex items-center justify-between bg-slate-900/90 border border-slate-800 rounded px-3 py-2 text-xs">
+                            <div>
+                                <span class="font-display font-bold text-purple-300 mr-1.5">[${q.rank}]</span>
+                                <span class="text-white ${q.completed ? 'line-through opacity-60' : ''}">${q.title}</span>
+                                <span class="text-slate-400 ml-1">(+${q.xp} XP)</span>
+                            </div>
+                            <button onclick="removeQuestFromHunter('${hunter.uid}', ${q.id})" class="text-rose-400 hover:text-rose-300 px-1.5" title="Entfernen">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `).join('') : '<p class="text-xs text-slate-500">Keine Dungeon-Quests zugewiesen.</p>'}
+                </div>
+
+                <div class="bg-slate-950/70 border border-slate-800 rounded-lg p-4 space-y-2.5">
+                    <div class="font-display font-bold text-sm text-cyan-300 uppercase">Tagesübungen von ${hunter.playerName} (${exercises.length})</div>
+                    ${exercises.length ? exercises.map(ex => `
+                        <div class="flex items-center justify-between bg-slate-900/90 border border-slate-800 rounded px-3 py-2 text-xs">
+                            <div>
+                                <span class="font-display font-bold text-white">${ex.label}</span>
+                                <span class="text-cyan-300 font-display ml-2">[${ex.current || 0} / ${ex.goal} ${ex.unit}]</span>
+                            </div>
+                            <button onclick="removeExerciseFromHunter('${hunter.uid}', '${ex.id}')" class="text-rose-400 hover:text-rose-300 px-1.5" title="Entfernen">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    `).join('') : '<p class="text-xs text-slate-500">Keine Tagesübungen vorhanden.</p>'}
+                </div>
+            `;
+        }
+
+        async function assignQuestToHunter() {
+            const uid = document.getElementById('targetHunterSelect')?.value;
+            const hunter = (window.allHunters || []).find(h => h.uid === uid);
+            const title = document.getElementById('assignQuestTitle').value.trim();
+            const rank = document.getElementById('assignQuestRank').value;
+            const stat = document.getElementById('assignQuestStat').value;
+
+            if (!hunter || !title) {
+                showNotification("HINWEIS", "Bitte Jäger und Quest-Titel angeben.", "fa-circle-exclamation");
+                return;
+            }
+
+            const xpMap = { E: 30, D: 60, C: 100, B: 180, A: 300, S: 500 };
+            const currentQuests = Array.isArray(hunter.customQuests) ? [...hunter.customQuests] : [];
+            currentQuests.unshift({
+                id: Date.now(),
+                title,
+                rank,
+                stat,
+                xp: xpMap[rank] || 50,
+                completed: false
+            });
+
+            document.getElementById('assignQuestTitle').value = '';
+            await window.updateHunterDoc(uid, { customQuests: currentQuests });
+        }
+
+        async function removeQuestFromHunter(uid, questId) {
+            const hunter = (window.allHunters || []).find(h => h.uid === uid);
+            if (!hunter) return;
+            const filtered = (hunter.customQuests || []).filter(q => q.id !== questId);
+            await window.updateHunterDoc(uid, { customQuests: filtered });
+        }
+
+        async function assignDailyExerciseToHunter() {
+            const uid = document.getElementById('targetHunterSelect')?.value;
+            const hunter = (window.allHunters || []).find(h => h.uid === uid);
+            const label = document.getElementById('assignExLabel').value.trim();
+            const goal = Math.max(0.5, parseFloat(document.getElementById('assignExGoal').value) || 20);
+            const unit = document.getElementById('assignExUnit').value;
+            const icon = document.getElementById('assignExIcon').value;
+
+            if (!hunter || !label) {
+                showNotification("HINWEIS", "Bitte Jäger und Übungsnamen angeben.", "fa-circle-exclamation");
+                return;
+            }
+
+            const currentExercises = Array.isArray(hunter.dailyExercises) ? [...hunter.dailyExercises] : [];
+            currentExercises.push({
+                id: 'ex_' + Date.now(),
+                label,
+                unit,
+                goal,
+                current: 0,
+                step: unit === 'km' ? 1 : 5,
+                icon
+            });
+
+            document.getElementById('assignExLabel').value = '';
+            await window.updateHunterDoc(uid, { dailyExercises: currentExercises });
+        }
+
+        async function removeExerciseFromHunter(uid, exId) {
+            const hunter = (window.allHunters || []).find(h => h.uid === uid);
+            if (!hunter) return;
+            const filtered = (hunter.dailyExercises || []).filter(ex => ex.id !== exId);
+            await window.updateHunterDoc(uid, { dailyExercises: filtered });
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/50');
+                btn.classList.add('bg-slate-900/60', 'text-slate-400', 'border-transparent');
+            });
+
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            activeBtn.classList.remove('bg-slate-900/60', 'text-slate-400', 'border-transparent');
+            activeBtn.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/50');
+
+            if (tabName === 'charts') {
+                setTimeout(updateCharts, 50);
+            }
+        }
+
+        function openAuthModal() {
+            const m = document.getElementById('authModal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+        function closeAuthModal() {
+            const m = document.getElementById('authModal');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+
+        let notifTimeout;
+        window.showNotification = function(title, message, iconClass = "fa-circle-info") {
+            const box = document.getElementById('systemNotification');
+            document.getElementById('notifTitle').textContent = title;
+            document.getElementById('notifMessage').textContent = message;
+            document.getElementById('notifIcon').className = `fa-solid ${iconClass} text-cyan-400 text-xl`;
+
+            box.classList.remove('translate-y-10', 'opacity-0');
+            clearTimeout(notifTimeout);
+            notifTimeout = setTimeout(() => {
+                box.classList.add('translate-y-10', 'opacity-0');
+            }, 3500);
+        };
+    </script>
+</body>
+</html>
