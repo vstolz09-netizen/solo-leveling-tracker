@@ -145,27 +145,31 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <span class="font-display font-bold text-lg tracking-wider text-white glow-text-cyan">SYSTEM</span>
-                        <span class="text-[10px] font-display uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">v3.0 // MONARCH</span>
+                        <span class="text-[10px] font-display uppercase px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">v4.0 // SHADOW MONARCH</span>
                     </div>
                     <p class="text-xs text-slate-400 tracking-wide" id="syncStatusText">LOKALER MODUS // INITIALISIERE...</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1.5 bg-purple-950/60 border border-purple-500/40 px-2.5 py-1.5 rounded text-xs" title="Schatten-Essenz zum Beschwören von Schatten-Soldaten">
+                    <i class="fa-solid fa-skull text-purple-400"></i>
+                    <span class="font-display font-bold text-purple-200"><span id="shadowEssenceHeader">0</span> Essenz</span>
+                </div>
                 <a href="guild.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-display tracking-wider uppercase bg-purple-600/20 hover:bg-purple-600/35 text-purple-200 border border-purple-400/50 transition">
                     <i class="fa-solid fa-trophy text-amber-400"></i>
-                    <span>Rangliste</span>
+                    <span>Rangliste & PvP</span>
                 </a>
                 <div id="userProfileBadge" class="hidden items-center gap-2 bg-slate-900/90 border border-emerald-500/40 px-3 py-1.5 rounded text-xs">
                     <i class="fa-solid fa-user-astronaut text-emerald-400"></i>
-                    <span id="userEmailDisplay" class="text-slate-200 font-medium truncate max-w-[140px]">Jäger</span>
+                    <span id="userEmailDisplay" class="text-slate-200 font-medium truncate max-w-[120px]">Jäger</span>
                     <button onclick="handleSignOut()" class="ml-1 text-rose-400 hover:text-rose-300 transition" title="Abmelden">
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                 </div>
                 <button id="openAuthModalBtn" onclick="openAuthModal()" class="flex items-center gap-2 px-3 py-1.5 rounded text-xs font-display tracking-wider uppercase bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-400/50 transition shadow-[0_0_10px_rgba(0,229,255,0.15)]">
                     <i class="fa-solid fa-right-to-bracket"></i>
-                    <span>Login / Cloud</span>
+                    <span>Login</span>
                 </button>
             </div>
         </div>
@@ -175,7 +179,7 @@
     <main class="max-w-6xl mx-auto px-4 pt-6 space-y-6">
 
         <!-- PLAYER STATUS HUD -->
-        <section class="system-panel rounded-lg p-5">
+        <section class="system-panel rounded-lg p-5 space-y-4">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                 
                 <!-- Rank & Identity -->
@@ -213,27 +217,27 @@
 
                 <!-- Core Stats & Points -->
                 <div class="lg:col-span-5 grid grid-cols-5 gap-2 text-center bg-slate-950/60 p-3 rounded-lg border border-slate-800/80">
-                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800">
+                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800" title="STR: +5% Raid-Schaden pro Punkt über 10">
                         <div class="text-[10px] font-display text-slate-400">STR</div>
                         <div id="statStr" class="font-display font-bold text-lg text-white">10</div>
                         <button onclick="allocateStat('str')" class="stat-plus-btn hidden mt-1 w-full bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 text-xs rounded py-0.5 border border-cyan-500/40 transition">+</button>
                     </div>
-                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800">
+                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800" title="AGI: +2% Daily-Quest XP pro Punkt über 10">
                         <div class="text-[10px] font-display text-slate-400">AGI</div>
                         <div id="statAgi" class="font-display font-bold text-lg text-white">10</div>
                         <button onclick="allocateStat('agi')" class="stat-plus-btn hidden mt-1 w-full bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 text-xs rounded py-0.5 border border-cyan-500/40 transition">+</button>
                     </div>
-                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800">
+                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800" title="VIT: +5% Overdrive-Maximalgrenze pro Punkt über 10">
                         <div class="text-[10px] font-display text-slate-400">VIT</div>
                         <div id="statVit" class="font-display font-bold text-lg text-white">10</div>
                         <button onclick="allocateStat('vit')" class="stat-plus-btn hidden mt-1 w-full bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 text-xs rounded py-0.5 border border-cyan-500/40 transition">+</button>
                     </div>
-                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800">
+                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800" title="INT: +3% Dungeon-Quest XP pro Punkt über 10">
                         <div class="text-[10px] font-display text-slate-400">INT</div>
                         <div id="statInt" class="font-display font-bold text-lg text-white">10</div>
                         <button onclick="allocateStat('int')" class="stat-plus-btn hidden mt-1 w-full bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 text-xs rounded py-0.5 border border-cyan-500/40 transition">+</button>
                     </div>
-                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800">
+                    <div class="p-1.5 rounded bg-slate-900/60 border border-slate-800" title="PER: +2% Expeditions-XP & Notfall-Chance pro Punkt über 10">
                         <div class="text-[10px] font-display text-slate-400">PER</div>
                         <div id="statPer" class="font-display font-bold text-lg text-white">10</div>
                         <button onclick="allocateStat('per')" class="stat-plus-btn hidden mt-1 w-full bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 text-xs rounded py-0.5 border border-cyan-500/40 transition">+</button>
@@ -248,7 +252,7 @@
                 <div class="lg:col-span-3 flex flex-col justify-between gap-2 bg-slate-950/60 p-3.5 rounded-lg border border-slate-800/80">
                     <div class="flex items-center justify-between">
                         <span class="text-xs text-slate-400 uppercase font-semibold">Heute erreicht</span>
-                        <span class="font-display font-bold text-cyan-300"><span id="todayCompletionPctDisplay">0</span>%</span>
+                        <span class="font-display font-bold text-cyan-300"><span id="todayCompletionPctDisplay">0</span>% / <span id="overdriveCapDisplay">150</span>%</span>
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-xs text-slate-400 uppercase font-semibold">Serie & XP-Bonus</span>
@@ -263,6 +267,20 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- AKTIVE ATTRIBUT- & SCHATTEN-BONI LEISTE -->
+            <div class="bg-slate-950/75 border border-slate-800/90 rounded-lg px-3.5 py-2 flex flex-wrap items-center justify-between gap-2 text-[11px] font-display">
+                <div class="flex flex-wrap items-center gap-3">
+                    <span class="text-rose-300"><i class="fa-solid fa-khanda mr-1"></i>Raid-DMG: <strong id="bonusRaidDmgText">+0%</strong></span>
+                    <span class="text-cyan-300"><i class="fa-solid fa-dumbbell mr-1"></i>Daily-XP: <strong id="bonusDailyXpText">+0%</strong></span>
+                    <span class="text-amber-300"><i class="fa-solid fa-gauge-high mr-1"></i>Overdrive-Cap: <strong id="bonusOverdriveCapText">150%</strong></span>
+                    <span class="text-purple-300"><i class="fa-solid fa-dungeon mr-1"></i>Dungeon-XP: <strong id="bonusDungeonXpText">+0%</strong></span>
+                    <span class="text-emerald-300"><i class="fa-solid fa-ghost mr-1"></i>Schatten-Armee: <strong id="bonusShadowArmyText">+0% XP</strong></span>
+                </div>
+                <div class="text-purple-300">
+                    Aktiver Schatten: <strong id="equippedShadowHudText" class="text-white">Keiner</strong>
+                </div>
             </div>
         </section>
 
@@ -279,7 +297,7 @@
                             <span id="suddenQuestTimerBadge" class="text-xs bg-rose-500/20 text-rose-200 border border-rose-500/50 px-2 py-0.5 rounded font-display font-bold">30:00</span>
                         </div>
                         <p id="suddenQuestDesc" class="text-sm text-white font-semibold mt-1">Ein Blutlust-Impuls wurde erkannt! Absolviere 30 Liegestütze oder 2 Minuten Plank.</p>
-                        <p class="text-xs font-display text-amber-300 mt-1">BELOHNUNG: +75 XP & +1 ZUFÄLLIGER STATUSPUNKT (KEINE STRAFE BEI IGNORIEREN)</p>
+                        <p class="text-xs font-display text-amber-300 mt-1">BELOHNUNG: +75 XP, +20 SCHATTEN-ESSENZ & +1 ZUFÄLLIGER STATUSPUNKT</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2 w-full md:w-auto">
@@ -324,7 +342,7 @@
                 <i class="fa-solid fa-dungeon mr-1.5"></i>Dungeons & Gilden-Raid
             </button>
             <button onclick="switchTab('shadow')" id="tab-btn-shadow" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
-                <i class="fa-solid fa-ghost mr-1.5"></i>Schattenarmee & Expeditionen
+                <i class="fa-solid fa-ghost mr-1.5"></i>Schattenarmee & Soldaten
             </button>
             <button onclick="switchTab('calendar')" id="tab-btn-calendar" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
                 <i class="fa-solid fa-calendar-days mr-1.5"></i>Kalender & Verlauf
@@ -369,7 +387,7 @@
                     </span>
                     <span class="text-slate-300">
                         <i class="fa-solid fa-gauge-high text-cyan-400 mr-1"></i>
-                        <strong>Overdrive (bis 150%):</strong> Jede +10% Übererfüllung bringt <span class="text-amber-300 font-display font-bold">+30 Bonus-XP</span>!
+                        <strong>Overdrive (bis <span id="infoOverdriveCap">150</span>%):</strong> Jede +10% Übererfüllung bringt <span class="text-amber-300 font-display font-bold">+30 Bonus-XP</span>!
                     </span>
                 </div>
 
@@ -386,7 +404,7 @@
                         <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">TAGESFORTSCHRITT IM VERLAUF</span>
                         <h3 class="font-display font-bold text-lg text-white">ERREICHTE TAGESZIELE IN % PRO TAG</h3>
                     </div>
-                    <span class="text-xs font-display text-slate-400">X: TAGE // Y: 0–150%</span>
+                    <span class="text-xs font-display text-slate-400">X: TAGE // Y: ERREICHTE %</span>
                 </div>
                 <div class="relative h-64 w-full">
                     <canvas id="dailyProgressChartCompact"></canvas>
@@ -405,7 +423,7 @@
                             <span class="text-[10px] font-display px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">S-RANG RAID</span>
                         </div>
                         <h2 id="raidBossName" class="font-display font-bold text-xl text-white mt-0.5">BLUTROTER KOMMANDANT IGRIS (RAID-BOSS)</h2>
-                        <p class="text-xs text-slate-300 mt-0.5">Jede Wiederholung oder gelaufene Einheit, die du in deinen Tagesübungen hinzufügst, verursacht direkten Schaden am Boss!</p>
+                        <p class="text-xs text-slate-300 mt-0.5">Jede Wiederholung verursacht Schaden am Boss – verstärkt durch dein <strong class="text-rose-300">STR-Attribut</strong> und deine <strong class="text-purple-300">Schattenarmee</strong>!</p>
                     </div>
                     <div class="flex items-center gap-2">
                         <button id="claimRaidRewardBtn" onclick="claimRaidBossReward()" disabled
@@ -448,30 +466,70 @@
             </div>
         </section>
 
-        <!-- TAB 3: SHADOW ARMY & EXPEDITIONS -->
+        <!-- TAB 3: SHADOW ARMY, SOLDIERS & EXPEDITIONS -->
         <section id="tab-shadow" class="tab-content space-y-5">
+            <!-- SCHATTEN-SOLDATEN BESCHWÖREN (UNBEGRENZT MIT SCHATTEN-ESSENZ) -->
+            <div class="system-panel system-panel-purple rounded-lg p-5 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-display text-purple-400 tracking-widest uppercase">UNBEGRENZTE ARMEE // „ARISE“</span>
+                            <span class="text-[10px] font-display px-2 py-0.5 rounded bg-purple-500/20 text-purple-200 border border-purple-400/40">KEIN LIMIT</span>
+                        </div>
+                        <h2 class="font-display font-bold text-xl text-white mt-0.5">SCHATTEN-SOLDATEN BESCHWÖREN</h2>
+                        <p class="text-xs text-slate-300 mt-1">
+                            Sammle <strong class="text-purple-300">Schatten-Essenz</strong> durch Quests und beschwöre beliebig viele Schatten-Soldaten.
+                            Jeder Soldat gewährt dauerhaft <strong class="text-cyan-300">+1% Gesamt-XP</strong> und <strong class="text-rose-300">+2% Raid-Schaden</strong>!
+                        </p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 flex-shrink-0">
+                        <div class="bg-slate-950/80 border border-purple-500/40 rounded-lg px-4 py-2 text-center">
+                            <div class="text-[10px] font-display uppercase text-slate-400">Deine Soldaten</div>
+                            <div id="shadowSoldiersCountDisplay" class="font-display font-black text-2xl text-purple-300">0</div>
+                        </div>
+                        <button onclick="summonShadowSoldier()" class="px-5 py-3 rounded font-display font-bold text-xs uppercase tracking-wider bg-purple-600 hover:bg-purple-500 text-white shadow-[0_0_18px_rgba(147,51,234,0.5)] transition">
+                            <i class="fa-solid fa-skull mr-1.5"></i>Soldat beschwören (50 Essenz)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    <div class="bg-slate-950/70 border border-slate-800 rounded p-3">
+                        <span class="text-slate-400 uppercase font-display">Verfügbare Essenz</span>
+                        <div class="font-display font-bold text-lg text-purple-300 mt-0.5"><span id="shadowEssenceBox">0</span> Essenz</div>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded p-3">
+                        <span class="text-slate-400 uppercase font-display">Soldaten XP-Bonus</span>
+                        <div class="font-display font-bold text-lg text-cyan-300 mt-0.5">+<span id="soldierXpBonusDisplay">0</span>% Gesamt-XP</div>
+                    </div>
+                    <div class="bg-slate-950/70 border border-slate-800 rounded p-3">
+                        <span class="text-slate-400 uppercase font-display">Soldaten Raid-Bonus</span>
+                        <div class="font-display font-bold text-lg text-rose-300 mt-0.5">+<span id="soldierRaidBonusDisplay">0</span>% Raid-DMG</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- AKTIVE SCHATTEN-EXPEDITION -->
             <div class="system-panel system-panel-purple rounded-lg p-5 space-y-4">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-4">
                     <div>
-                        <span class="text-xs font-display text-purple-400 tracking-widest uppercase">PASSIVES XP-SYSTEM // 24H-MISSION</span>
+                        <span class="text-xs font-display text-purple-400 tracking-widest uppercase">PASSIVES XP- & ESSENZ-SYSTEM // 24H-MISSION</span>
                         <h2 class="font-display font-bold text-xl text-white mt-0.5">SCHATTEN-EXPEDITION</h2>
-                        <p class="text-xs text-slate-300 mt-1">Schicke einen deiner freigeschalteten Schatten auf eine 24h-Expedition. Bedingung für die Belohnung: Du musst mindestens <strong class="text-cyan-300">80%</strong> deines heutigen Tagesziels erreichen!</p>
+                        <p class="text-xs text-slate-300 mt-1">Schicke einen freigeschalteten Schatten auf eine 24h-Expedition. Bedingung: Mindestens <strong class="text-cyan-300">80%</strong> heutiges Tagesziel erreicht (+30 Essenz & Bonus-XP).</p>
                     </div>
-                    <div id="expeditionActionArea" class="flex-shrink-0">
-                        <!-- Dynamisch -->
-                    </div>
+                    <div id="expeditionActionArea" class="flex-shrink-0"></div>
                 </div>
                 <div id="activeExpeditionStatus" class="bg-slate-950/70 border border-slate-800 rounded-lg p-4 text-sm text-slate-300">
-                    Keine aktive Expedition. Wähle unten einen freigeschalteten Schatten aus, um ihn loszuschicken!
+                    Keine aktive Expedition.
                 </div>
             </div>
 
-            <!-- SCHATTENARMEE GRID -->
+            <!-- SCHATTEN-KOMMANDANTEN GRID (MIT AUSRÜST-FUNKTION) -->
             <div class="system-panel system-panel-purple rounded-lg p-5">
                 <div class="border-b border-slate-800 pb-4 mb-5">
-                    <span class="text-xs font-display text-purple-400 tracking-widest uppercase">EXTRAHIERTE SCHATTEN // MEILENSTEINE</span>
-                    <h2 class="font-display font-bold text-xl text-white mt-0.5">DEINE SCHATTENARMEE</h2>
+                    <span class="text-xs font-display text-purple-400 tracking-widest uppercase">EXTRAHIERTE SCHATTEN-KOMMANDANTEN // PASSIVE BONI</span>
+                    <h2 class="font-display font-bold text-xl text-white mt-0.5">ELITE-SCHATTEN & AUSRÜSTEN</h2>
+                    <p class="text-xs text-slate-400 mt-1">Rüste einen freigeschalteten Kommandanten aus, um seinen dauerhaften Kampf- oder Trainings-Bonus zu aktivieren.</p>
                 </div>
 
                 <div id="shadowArmyGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -480,8 +538,32 @@
             </div>
         </section>
 
-        <!-- TAB 4: CALENDAR & DAILY % CHART -->
+        <!-- TAB 4: CALENDAR, WEEKLY/MONTHLY STATS & DAILY % CHART -->
         <section id="tab-calendar" class="tab-content space-y-5">
+            <!-- WOCHEN- & MONATS-AUSWERTUNG -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="system-panel rounded-lg p-4">
+                    <div class="text-xs font-display uppercase text-slate-400">7-Tage Schnitt</div>
+                    <div id="statAvg7Days" class="font-display font-black text-2xl text-cyan-300 mt-1">0%</div>
+                    <div class="text-xs text-slate-400 mt-0.5">Letzte 7 Tage</div>
+                </div>
+                <div class="system-panel rounded-lg p-4">
+                    <div class="text-xs font-display uppercase text-slate-400">30-Tage Schnitt</div>
+                    <div id="statAvg30Days" class="font-display font-black text-2xl text-purple-300 mt-1">0%</div>
+                    <div class="text-xs text-slate-400 mt-0.5">Letzte 30 Tage</div>
+                </div>
+                <div class="system-panel rounded-lg p-4">
+                    <div class="text-xs font-display uppercase text-slate-400">100%+ Tage (Monat)</div>
+                    <div id="statMonthFullDays" class="font-display font-black text-2xl text-emerald-400 mt-1">0 Tage</div>
+                    <div class="text-xs text-slate-400 mt-0.5">Im angezeigten Monat</div>
+                </div>
+                <div class="system-panel rounded-lg p-4">
+                    <div class="text-xs font-display uppercase text-slate-400">Monats-Bestwert</div>
+                    <div id="statMonthBestPct" class="font-display font-black text-2xl text-amber-400 mt-1">0%</div>
+                    <div class="text-xs text-slate-400 mt-0.5">Höchste Tagesquote</div>
+                </div>
+            </div>
+
             <div class="system-panel rounded-lg p-5 space-y-5">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
                     <div>
@@ -515,7 +597,7 @@
                         <div class="text-sm text-slate-300 mt-1">Erreichte Tagesziele: <span id="selectedDayPctText" class="font-display font-bold text-cyan-300">0%</span></div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <input type="number" id="manualDayPctInput" min="0" max="150" placeholder="0-150 %"
+                        <input type="number" id="manualDayPctInput" min="0" max="250" placeholder="0-250 %"
                             class="w-28 bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded px-3 py-1.5 text-sm font-display text-white">
                         <button onclick="saveSelectedDayPct()" class="px-4 py-1.5 rounded bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-display font-bold text-xs uppercase transition">
                             % Speichern
@@ -744,7 +826,7 @@
             onAuthStateChanged,
             signOut
         } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBH9PYyoozlpn-uGfNntqu0Tiak8hRU80A",
@@ -960,7 +1042,7 @@
 
     <!-- MAIN APPLICATION LOGIC -->
     <script>
-        const STORAGE_KEY = 'solo_leveling_tracker_v3_0';
+        const STORAGE_KEY = 'solo_leveling_tracker_v4_0';
 
         function getTodayStr() {
             return new Date().toISOString().split('T')[0];
@@ -986,8 +1068,11 @@
             autoScale: true,
             myRaidDamage: 0,
             claimedRaidBossId: 0,
-            activeExpedition: null, // { shadowId, shadowName, rewardXp, startTime, endTime }
-            suddenQuest: null,      // { id, desc, expiresAt, xp }
+            shadowEssence: 50,         // Start-Essenz für ersten Schatten-Soldaten
+            shadowSoldiersCount: 0,    // Unbegrenzte Schatten-Soldaten
+            equippedShadowId: null,    // Aktiver Elite-Kommandant
+            activeExpedition: null,
+            suddenQuest: null,
             lastSuddenQuestDate: '',
             dailyExercises: JSON.parse(JSON.stringify(DEFAULT_EXERCISES)),
             dailyHistory: {},
@@ -998,14 +1083,14 @@
         };
 
         const SHADOW_ARMY = [
-            { id: 'igris', name: 'IGRIS', title: 'Blutroter Kommandant', reqLevel: 5, expXp: 50, icon: 'fa-chess-knight', desc: 'Freigeschaltet ab Level 5' },
-            { id: 'tank', name: 'TANK', title: 'Eisbären-Alpha', reqLevel: 10, expXp: 65, icon: 'fa-paw', desc: 'Freigeschaltet ab Level 10' },
-            { id: 'iron', name: 'IRON', title: 'Schwerer Schildträger', reqLevel: 15, expXp: 75, icon: 'fa-shield-halved', desc: 'Freigeschaltet ab Level 15' },
-            { id: 'tusk', name: 'TUSK', title: 'Hochork-Schamane', reqLevel: 25, expXp: 90, icon: 'fa-wand-sparkles', desc: 'Freigeschaltet ab Level 25' },
-            { id: 'kaisel', name: 'KAISEL', title: 'Schatten-Wyvern', reqLevel: 35, expXp: 100, icon: 'fa-dragon', desc: 'Freigeschaltet ab Level 35' },
-            { id: 'beru', name: 'BERU', title: 'Ameisenkönig-Marshal', reqLevel: 50, expXp: 120, icon: 'fa-crown', desc: 'Freigeschaltet ab Level 50' },
-            { id: 'greed', name: 'GREED', title: 'General-Klasse Schatten', reqLevel: 70, expXp: 140, icon: 'fa-skull', desc: 'Freigeschaltet ab Level 70' },
-            { id: 'bellion', name: 'BELLION', title: 'Großmarschall der Schatten', reqLevel: 100, expXp: 180, icon: 'fa-khanda', desc: 'Freigeschaltet ab Level 100' }
+            { id: 'igris', name: 'IGRIS', title: 'Blutroter Kommandant', reqLevel: 5, expXp: 50, bonusLabel: '+15% Raid-DMG', bonusType: 'raid', bonusVal: 15, icon: 'fa-chess-knight', desc: 'Ab Level 5' },
+            { id: 'tank', name: 'TANK', title: 'Eisbären-Alpha', reqLevel: 10, expXp: 65, bonusLabel: '+10% Daily-XP', bonusType: 'daily_xp', bonusVal: 10, icon: 'fa-paw', desc: 'Ab Level 10' },
+            { id: 'iron', name: 'IRON', title: 'Schwerer Schildträger', reqLevel: 15, expXp: 75, bonusLabel: '+15% Overdrive-Cap', bonusType: 'overdrive', bonusVal: 15, icon: 'fa-shield-halved', desc: 'Ab Level 15' },
+            { id: 'tusk', name: 'TUSK', title: 'Hochork-Schamane', reqLevel: 25, expXp: 90, bonusLabel: '+20% Dungeon-XP', bonusType: 'dungeon_xp', bonusVal: 20, icon: 'fa-wand-sparkles', desc: 'Ab Level 25' },
+            { id: 'kaisel', name: 'KAISEL', title: 'Schatten-Wyvern', reqLevel: 35, expXp: 100, bonusLabel: '+15% Gesamt-XP', bonusType: 'all_xp', bonusVal: 15, icon: 'fa-dragon', desc: 'Ab Level 35' },
+            { id: 'beru', name: 'BERU', title: 'Ameisenkönig-Marshal', reqLevel: 50, expXp: 120, bonusLabel: '+30% Raid-DMG', bonusType: 'raid', bonusVal: 30, icon: 'fa-crown', desc: 'Ab Level 50' },
+            { id: 'greed', name: 'GREED', title: 'General-Klasse Schatten', reqLevel: 70, expXp: 140, bonusLabel: '+25% Gesamt-XP', bonusType: 'all_xp', bonusVal: 25, icon: 'fa-skull', desc: 'Ab Level 70' },
+            { id: 'bellion', name: 'BELLION', title: 'Großmarschall der Schatten', reqLevel: 100, expXp: 180, bonusLabel: '+40% Alle Boni', bonusType: 'all', bonusVal: 40, icon: 'fa-khanda', desc: 'Ab Level 100' }
         ];
 
         const SUDDEN_QUEST_POOL = [
@@ -1026,7 +1111,7 @@
         let selectedCalendarDate = getTodayStr();
 
         function initApp() {
-            const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('solo_leveling_tracker_v2_7');
+            const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('solo_leveling_tracker_v3_0') || localStorage.getItem('solo_leveling_tracker_v2_7');
             if (saved) {
                 try {
                     const parsed = JSON.parse(saved);
@@ -1077,6 +1162,54 @@
             }
         };
 
+        // BERECHNUNG ALLER STAT- & SCHATTEN-BONI
+        function getPlayerBonuses() {
+            const s = window.gameState.stats || { str: 10, agi: 10, vit: 10, int: 10, per: 10 };
+            const strExtra = Math.max(0, (s.str || 10) - 10);
+            const agiExtra = Math.max(0, (s.agi || 10) - 10);
+            const vitExtra = Math.max(0, (s.vit || 10) - 10);
+            const intExtra = Math.max(0, (s.int || 10) - 10);
+            const perExtra = Math.max(0, (s.per || 10) - 10);
+
+            const soldiers = window.gameState.shadowSoldiersCount || 0;
+            const soldierXpPct = soldiers * 1;     // +1% Gesamt-XP pro Schatten-Soldat
+            const soldierRaidPct = soldiers * 2;   // +2% Raid-DMG pro Schatten-Soldat
+
+            const eqId = window.gameState.equippedShadowId;
+            const eqShadow = SHADOW_ARMY.find(sh => sh.id === eqId && (window.gameState.level || 1) >= sh.reqLevel);
+
+            let shadowRaidBonus = 0;
+            let shadowDailyXpBonus = 0;
+            let shadowDungeonXpBonus = 0;
+            let shadowAllXpBonus = 0;
+            let shadowOverdriveBonus = 0;
+
+            if (eqShadow) {
+                if (eqShadow.bonusType === 'raid') shadowRaidBonus = eqShadow.bonusVal;
+                if (eqShadow.bonusType === 'daily_xp') shadowDailyXpBonus = eqShadow.bonusVal;
+                if (eqShadow.bonusType === 'dungeon_xp') shadowDungeonXpBonus = eqShadow.bonusVal;
+                if (eqShadow.bonusType === 'all_xp') shadowAllXpBonus = eqShadow.bonusVal;
+                if (eqShadow.bonusType === 'overdrive') shadowOverdriveBonus = eqShadow.bonusVal;
+                if (eqShadow.bonusType === 'all') {
+                    shadowRaidBonus = eqShadow.bonusVal;
+                    shadowAllXpBonus = eqShadow.bonusVal;
+                    shadowOverdriveBonus = 25;
+                }
+            }
+
+            return {
+                raidDmgPct: (strExtra * 5) + soldierRaidPct + shadowRaidBonus,
+                dailyXpPct: (agiExtra * 2) + soldierXpPct + shadowDailyXpBonus + shadowAllXpBonus,
+                overdriveCap: 150 + (vitExtra * 5) + shadowOverdriveBonus,
+                dungeonXpPct: (intExtra * 3) + soldierXpPct + shadowDungeonXpBonus + shadowAllXpBonus,
+                expeditionXpPct: (perExtra * 2) + soldierXpPct + shadowAllXpBonus,
+                suddenChancePct: Math.min(85, 35 + (perExtra * 2)),
+                soldierXpPct,
+                soldierRaidPct,
+                equippedShadowName: eqShadow ? eqShadow.name : 'Keiner'
+            };
+        }
+
         function checkDayRollover() {
             const today = getTodayStr();
             if (window.gameState.lastActiveDate !== today) {
@@ -1098,26 +1231,26 @@
             }
         }
 
-        // Berechnet % inkl. Overdrive bis max. 150%
         function calculateDailyCompletionPct() {
             const list = window.gameState.dailyExercises;
             if (!list || list.length === 0) return 0;
+            const bonuses = getPlayerBonuses();
+            const maxRatio = bonuses.overdriveCap / 100;
+
             const sumRatios = list.reduce((acc, ex) => {
                 const goal = ex.goal > 0 ? ex.goal : 1;
-                const ratio = Math.min(1.5, Math.max(0, ex.current / goal));
+                const ratio = Math.min(maxRatio, Math.max(0, ex.current / goal));
                 return acc + ratio;
             }, 0);
             return Math.round((sumRatios / list.length) * 100);
         }
 
-        // Streak-Multiplikator: +10% pro 3 Tage Serie (max. +50%)
         function getStreakBonusPct() {
             const streak = window.gameState.streak || 0;
             const steps = Math.floor(streak / 3);
             return Math.min(50, steps * 10);
         }
 
-        // Overdrive-Bonus: +30 XP pro +10% über 100% (bis max. 150% -> +150 XP)
         function getOverdriveBonusXp() {
             const pct = calculateDailyCompletionPct();
             if (pct <= 100) return 0;
@@ -1125,11 +1258,11 @@
             return extraSteps * 30;
         }
 
-        // Gesamt-XP für die Tägliche Quest berechnen
         function calculateDailyQuestTotalXp() {
+            const bonuses = getPlayerBonuses();
             const baseXp = 100;
-            const streakMult = 1 + (getStreakBonusPct() / 100);
-            const scaledBase = Math.round(baseXp * streakMult);
+            const totalPctBonus = getStreakBonusPct() + bonuses.dailyXpPct;
+            const scaledBase = Math.round(baseXp * (1 + totalPctBonus / 100));
             const overdriveXp = getOverdriveBonusXp();
             return scaledBase + overdriveXp;
         }
@@ -1139,12 +1272,47 @@
             window.gameState.dailyHistory[today] = calculateDailyCompletionPct();
         }
 
+        // SCHATTEN-SOLDATEN BESCHWÖREN & SCHATTEN AUSRÜSTEN
+        function summonShadowSoldier() {
+            const cost = 50;
+            const currentEssence = window.gameState.shadowEssence || 0;
+            if (currentEssence < cost) {
+                showNotification("ZU WENIG ESSENZ", `Du benötigst ${cost} Schatten-Essenz (aktuell: ${currentEssence}).`, "fa-circle-exclamation");
+                return;
+            }
+            window.gameState.shadowEssence = currentEssence - cost;
+            window.gameState.shadowSoldiersCount = (window.gameState.shadowSoldiersCount || 0) + 1;
+            window.saveState();
+            renderAll();
+            showNotification(
+                "ARISE! SCHATTEN-SOLDAT",
+                `Soldat #${window.gameState.shadowSoldiersCount} beschworen! (+1% Gesamt-XP & +2% Raid-DMG)`,
+                "fa-skull"
+            );
+        }
+
+        function toggleEquipShadow(shadowId) {
+            const sh = SHADOW_ARMY.find(s => s.id === shadowId);
+            if (!sh || window.gameState.level < sh.reqLevel) return;
+
+            if (window.gameState.equippedShadowId === shadowId) {
+                window.gameState.equippedShadowId = null;
+                showNotification("SCHATTEN ZURÜCKGERUFEN", `${sh.name} wurde abgelegt.`, "fa-ghost");
+            } else {
+                window.gameState.equippedShadowId = shadowId;
+                showNotification("SCHATTEN AUSGERÜSTET", `${sh.name} kämpft jetzt aktiv an deiner Seite (${sh.bonusLabel})!`, "fa-ghost");
+            }
+            window.saveState();
+            renderAll();
+        }
+
         // PLÖTZLICHE QUESTS (SUDDEN QUESTS)
         function maybeSpawnDailySuddenQuest() {
             const today = getTodayStr();
             if (window.gameState.lastSuddenQuestDate === today) return;
-            // 35% Chance beim ersten Öffnen am Tag
-            if (Math.random() < 0.35 && !window.gameState.suddenQuest) {
+            const bonuses = getPlayerBonuses();
+            const chance = bonuses.suddenChancePct / 100;
+            if (Math.random() < chance && !window.gameState.suddenQuest) {
                 triggerSuddenQuest(false);
             }
         }
@@ -1155,14 +1323,14 @@
             window.gameState.suddenQuest = {
                 id: Date.now(),
                 desc,
-                expiresAt: Date.now() + 30 * 60 * 1000, // 30 Minuten
+                expiresAt: Date.now() + 30 * 60 * 1000,
                 xp: 75
             };
             window.gameState.lastSuddenQuestDate = today;
             window.saveState();
             renderSuddenQuest();
             if (manual) {
-                showNotification("NOTFALL-QUEST", "Eine plötzliche Quest ist erschienen! (+75 XP)", "fa-bolt");
+                showNotification("NOTFALL-QUEST", "Eine plötzliche Quest ist erschienen! (+75 XP & +20 Essenz)", "fa-bolt");
             }
         }
 
@@ -1171,8 +1339,9 @@
             const statKeys = ['str', 'agi', 'vit', 'int', 'per'];
             const randomStat = statKeys[Math.floor(Math.random() * statKeys.length)];
             window.gameState.stats[randomStat] += 1;
+            window.gameState.shadowEssence = (window.gameState.shadowEssence || 0) + 20;
             window.gameState.suddenQuest = null;
-            showNotification("NOTFALL-QUEST GEKLÄRT", `+75 XP und +1 ${randomStat.toUpperCase()} erhalten!`, "fa-bolt");
+            showNotification("NOTFALL-QUEST GEKLÄRT", `+75 XP, +20 Essenz und +1 ${randomStat.toUpperCase()} erhalten!`, "fa-bolt");
             addXp(75);
         }
 
@@ -1216,7 +1385,7 @@
 
             if (curHp <= 0 && !alreadyClaimed) {
                 btn.disabled = false;
-                btn.textContent = "Raid-Belohnung einfordern (+250 XP)";
+                btn.textContent = "Raid-Belohnung einfordern (+250 XP & +40 Essenz)";
                 btn.className = "px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-rose-600 hover:bg-rose-500 text-white shadow-[0_0_15px_rgba(255,42,95,0.6)] cursor-pointer transition animate-pulse";
             } else if (alreadyClaimed) {
                 btn.disabled = true;
@@ -1233,7 +1402,8 @@
             const rb = window.raidBossState;
             if (!rb || rb.currentHp > 0 || window.gameState.claimedRaidBossId === rb.bossId) return;
             window.gameState.claimedRaidBossId = rb.bossId;
-            showNotification("RAID-BOSS BESIEGT!", "+250 XP für den Gilden-Sieg erhalten!", "fa-crown");
+            window.gameState.shadowEssence = (window.gameState.shadowEssence || 0) + 40;
+            showNotification("RAID-BOSS BESIEGT!", "+250 XP & +40 Schatten-Essenz für den Gilden-Sieg erhalten!", "fa-crown");
             addXp(250);
         }
 
@@ -1243,7 +1413,7 @@
             showNotification("NEUER RAID-BOSS", "Ein neuer Boss ist in der Gilde erschienen!", "fa-skull");
         }
 
-        // SCHATTEN-EXPEDITIONEN (PASSIVE XP)
+        // SCHATTEN-EXPEDITIONEN
         function startShadowExpedition(shadowId) {
             if (window.gameState.activeExpedition) {
                 showNotification("HINWEIS", "Es läuft bereits eine Schatten-Expedition.", "fa-circle-exclamation");
@@ -1252,17 +1422,20 @@
             const sh = SHADOW_ARMY.find(s => s.id === shadowId);
             if (!sh || window.gameState.level < sh.reqLevel) return;
 
+            const bonuses = getPlayerBonuses();
+            const scaledRewardXp = Math.round(sh.expXp * (1 + bonuses.expeditionXpPct / 100));
+
             const now = Date.now();
             window.gameState.activeExpedition = {
                 shadowId: sh.id,
                 shadowName: sh.name,
-                rewardXp: sh.expXp,
+                rewardXp: scaledRewardXp,
                 startTime: now,
                 endTime: now + 24 * 60 * 60 * 1000
             };
             window.saveState();
             renderShadowArmy();
-            showNotification("EXPEDITION GESTARTET", `${sh.name} ist für 24h auf Mission (+${sh.expXp} XP).`, "fa-ghost");
+            showNotification("EXPEDITION GESTARTET", `${sh.name} ist für 24h auf Mission (+${scaledRewardXp} XP & +30 Essenz).`, "fa-ghost");
         }
 
         function claimShadowExpedition() {
@@ -1276,9 +1449,47 @@
             }
 
             const xpGain = exp.rewardXp || 50;
+            window.gameState.shadowEssence = (window.gameState.shadowEssence || 0) + 30;
             window.gameState.activeExpedition = null;
-            showNotification("EXPEDITION ABGESCHLOSSEN", `${exp.shadowName} kehrt zurück und bringt +${xpGain} XP!`, "fa-ghost");
+            showNotification("EXPEDITION ABGESCHLOSSEN", `${exp.shadowName} kehrt zurück: +${xpGain} XP & +30 Schatten-Essenz!`, "fa-ghost");
             addXp(xpGain);
+        }
+
+        // WOCHEN- & MONATS-STATISTIKEN
+        function updateWeeklyAndMonthlyStats() {
+            const last7 = getSeriesForDays(7).values;
+            const last30 = getSeriesForDays(30).values;
+
+            const avg7 = last7.length ? Math.round(last7.reduce((a, b) => a + b, 0) / last7.length) : 0;
+            const avg30 = last30.length ? Math.round(last30.reduce((a, b) => a + b, 0) / last30.length) : 0;
+
+            const lastDayOfMonth = new Date(calYear, calMonth + 1, 0).getDate();
+            const todayIso = getTodayStr();
+            let fullDaysCount = 0;
+            let bestPct = 0;
+
+            for (let day = 1; day <= lastDayOfMonth; day++) {
+                const mm = String(calMonth + 1).padStart(2, '0');
+                const dd = String(day).padStart(2, '0');
+                const iso = `${calYear}-${mm}-${dd}`;
+
+                const pct = iso === todayIso
+                    ? calculateDailyCompletionPct()
+                    : (typeof window.gameState.dailyHistory[iso] === 'number' ? window.gameState.dailyHistory[iso] : 0);
+
+                if (pct >= 100) fullDaysCount++;
+                if (pct > bestPct) bestPct = pct;
+            }
+
+            const el7 = document.getElementById('statAvg7Days');
+            const el30 = document.getElementById('statAvg30Days');
+            const elFull = document.getElementById('statMonthFullDays');
+            const elBest = document.getElementById('statMonthBestPct');
+
+            if (el7) el7.textContent = `${avg7}%`;
+            if (el30) el30.textContent = `${avg30}%`;
+            if (elFull) elFull.textContent = `${fullDaysCount} Tage`;
+            if (elBest) elBest.textContent = `${bestPct}%`;
         }
 
         function getSeriesForDays(daysCount) {
@@ -1371,6 +1582,7 @@
 
             grid.innerHTML = html;
             updateSelectedDayPanel();
+            updateWeeklyAndMonthlyStats();
         }
 
         function selectCalendarDate(iso) {
@@ -1400,7 +1612,7 @@
             const inputEl = document.getElementById('manualDayPctInput');
             let val = parseInt(inputEl.value, 10);
             if (isNaN(val)) return;
-            val = Math.max(0, Math.min(150, val));
+            val = Math.max(0, Math.min(250, val));
 
             window.gameState.dailyHistory[selectedCalendarDate] = val;
             window.saveState();
@@ -1471,19 +1683,20 @@
             const ex = window.gameState.dailyExercises.find(item => item.id === exId);
             if (!ex) return;
 
+            const bonuses = getPlayerBonuses();
             const prevVal = ex.current;
-            // Overdrive erlaubt bis 150% des Tagesziels
-            const maxOverdrive = Math.round((ex.goal * 1.5) * 10) / 10;
+            const maxOverdrive = Math.round((ex.goal * (bonuses.overdriveCap / 100)) * 10) / 10;
             let nextVal = Math.round((ex.current + delta) * 10) / 10;
             if (nextVal < 0) nextVal = 0;
             if (nextVal > maxOverdrive) nextVal = maxOverdrive;
             ex.current = nextVal;
 
-            // Positiver Fortschritt verursacht Schaden am Gilden-Raid-Boss
+            // Raid-Schaden inkl. STR-, Soldaten- & Schatten-Bonus
             const actualGain = Math.round((nextVal - prevVal) * 10) / 10;
             if (actualGain > 0 && typeof window.dealDamageToRaidBoss === 'function') {
-                const dmg = ex.unit === 'km' ? Math.round(actualGain * 10) : Math.round(actualGain);
-                window.dealDamageToRaidBoss(dmg);
+                const rawDmg = ex.unit === 'km' ? actualGain * 10 : actualGain;
+                const boostedDmg = Math.max(1, Math.round(rawDmg * (1 + bonuses.raidDmgPct / 100)));
+                window.dealDamageToRaidBoss(boostedDmg);
             }
 
             recordTodayPercentage();
@@ -1501,12 +1714,14 @@
             const ex = window.gameState.dailyExercises.find(item => item.id === exId);
             if (!ex) return;
 
+            const bonuses = getPlayerBonuses();
             const actualGain = Math.max(0, ex.goal - ex.current);
             ex.current = Math.max(ex.current, ex.goal);
 
             if (actualGain > 0 && typeof window.dealDamageToRaidBoss === 'function') {
-                const dmg = ex.unit === 'km' ? Math.round(actualGain * 10) : Math.round(actualGain);
-                window.dealDamageToRaidBoss(dmg);
+                const rawDmg = ex.unit === 'km' ? actualGain * 10 : actualGain;
+                const boostedDmg = Math.max(1, Math.round(rawDmg * (1 + bonuses.raidDmgPct / 100)));
+                window.dealDamageToRaidBoss(boostedDmg);
             }
 
             recordTodayPercentage();
@@ -1593,7 +1808,7 @@
                 badge.textContent = "BEREIT ZUM ABSCHLUSS";
                 badge.className = "px-3 py-1.5 rounded text-xs font-display font-bold uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-400 animate-pulse";
                 btn.disabled = false;
-                btn.textContent = `Belohnung einfordern (+${totalXp} XP)`;
+                btn.textContent = `Belohnung einfordern (+${totalXp} XP & +25 Essenz)`;
                 btn.className = "px-4 py-2 rounded font-display font-bold text-xs uppercase tracking-wider bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-[0_0_15px_rgba(0,229,255,0.5)] cursor-pointer transition animate-pulse-glow";
             } else {
                 badge.textContent = "IN ARBEIT";
@@ -1616,10 +1831,11 @@
             window.gameState.streak += 1;
             window.gameState.stats.str += 1;
             window.gameState.stats.vit += 1;
+            window.gameState.shadowEssence = (window.gameState.shadowEssence || 0) + 25;
             recordTodayPercentage();
             showNotification(
                 "QUEST ABGESCHLOSSEN",
-                `+${earnedXp} XP (inkl. +${overdriveBonus} XP Overdrive) & +1 STR, +1 VIT!`,
+                `+${earnedXp} XP (+${overdriveBonus} Overdrive), +25 Schatten-Essenz & +1 STR/VIT!`,
                 "fa-trophy"
             );
             addXp(earnedXp);
@@ -1637,7 +1853,7 @@
             window.gameState.stats[statKey] += 1;
             window.gameState.statPoints -= 1;
             window.saveState();
-            renderHud();
+            renderAll();
         }
 
         function updatePlayerName(val) {
@@ -1669,7 +1885,9 @@
             const todayPct = calculateDailyCompletionPct();
             const streakBonus = getStreakBonusPct();
             const overdriveBonus = getOverdriveBonusXp();
+            const bonuses = getPlayerBonuses();
 
+            document.getElementById('shadowEssenceHeader').textContent = gs.shadowEssence || 0;
             document.getElementById('playerNameInput').value = gs.playerName;
             document.getElementById('playerLevelDisplay').textContent = gs.level;
             document.getElementById('playerRankDisplay').textContent = rankInfo.rank;
@@ -1697,10 +1915,20 @@
             }
 
             document.getElementById('todayCompletionPctDisplay').textContent = todayPct;
+            document.getElementById('overdriveCapDisplay').textContent = bonuses.overdriveCap;
+            document.getElementById('infoOverdriveCap').textContent = bonuses.overdriveCap;
             document.getElementById('dailyPctBadge').textContent = `${todayPct}%`;
             document.getElementById('overdriveBonusBadge').textContent = `+${overdriveBonus} XP`;
             document.getElementById('streakDisplay').textContent = gs.streak;
             document.getElementById('streakBonusDisplay').textContent = `+${streakBonus}%`;
+
+            // Boni-Leiste aktualisieren
+            document.getElementById('bonusRaidDmgText').textContent = `+${bonuses.raidDmgPct}%`;
+            document.getElementById('bonusDailyXpText').textContent = `+${bonuses.dailyXpPct}%`;
+            document.getElementById('bonusOverdriveCapText').textContent = `${bonuses.overdriveCap}%`;
+            document.getElementById('bonusDungeonXpText').textContent = `+${bonuses.dungeonXpPct}%`;
+            document.getElementById('bonusShadowArmyText').textContent = `+${bonuses.soldierXpPct}% XP (${gs.shadowSoldiersCount || 0} Soldaten)`;
+            document.getElementById('equippedShadowHudText').textContent = bonuses.equippedShadowName;
 
             const penaltyBox = document.getElementById('penaltyAlertBox');
             if (gs.penaltyActive) {
@@ -1900,18 +2128,22 @@
 
         function renderCustomQuests() {
             const container = document.getElementById('customQuestsContainer');
+            const bonuses = getPlayerBonuses();
+
             if (!window.gameState.customQuests.length) {
                 container.innerHTML = `<p class="text-sm text-slate-400 text-center py-6">Keine aktiven Dungeon-Quests vorhanden. Erstelle eine neue Quest!</p>`;
                 return;
             }
 
-            container.innerHTML = window.gameState.customQuests.map(q => `
+            container.innerHTML = window.gameState.customQuests.map(q => {
+                const boostedXp = Math.round(q.xp * (1 + bonuses.dungeonXpPct / 100));
+                return `
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-950/70 border ${q.completed ? 'border-emerald-500/40 opacity-75' : 'border-purple-500/30'} rounded-lg p-4">
                     <div class="flex items-center gap-3">
                         <span class="w-8 h-8 rounded bg-purple-950 border border-purple-500/50 flex items-center justify-center font-display font-bold text-purple-300 text-sm">${q.rank}</span>
                         <div>
                             <div class="font-display font-bold text-sm text-white ${q.completed ? 'line-through text-slate-400' : ''}">${q.title}</div>
-                            <div class="text-xs text-purple-300 font-display uppercase">Belohnung: +${q.xp} XP & +1 ${q.stat.toUpperCase()}</div>
+                            <div class="text-xs text-purple-300 font-display uppercase">Belohnung: +${boostedXp} XP, +15 Essenz & +1 ${q.stat.toUpperCase()}</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-2 self-end sm:self-center">
@@ -1924,8 +2156,8 @@
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
         function addCustomQuest() {
@@ -1954,10 +2186,14 @@
         function completeCustomQuest(id) {
             const quest = window.gameState.customQuests.find(q => q.id === id);
             if (!quest || quest.completed) return;
+            const bonuses = getPlayerBonuses();
+            const boostedXp = Math.round(quest.xp * (1 + bonuses.dungeonXpPct / 100));
+
             quest.completed = true;
             window.gameState.stats[quest.stat] += 1;
-            showNotification("DUNGEON GEKLÄRT", `+${quest.xp} XP und +1 ${quest.stat.toUpperCase()}!`, "fa-dungeon");
-            addXp(quest.xp);
+            window.gameState.shadowEssence = (window.gameState.shadowEssence || 0) + 15;
+            showNotification("DUNGEON GEKLÄRT", `+${boostedXp} XP, +15 Schatten-Essenz und +1 ${quest.stat.toUpperCase()}!`, "fa-dungeon");
+            addXp(boostedXp);
         }
 
         function deleteCustomQuest(id) {
@@ -1973,6 +2209,20 @@
             const lvl = window.gameState.level;
             const exp = window.gameState.activeExpedition;
             const todayPct = calculateDailyCompletionPct();
+            const bonuses = getPlayerBonuses();
+
+            // Soldaten-Anzeige aktualisieren
+            const soldiersCount = window.gameState.shadowSoldiersCount || 0;
+            const essence = window.gameState.shadowEssence || 0;
+            const scEl = document.getElementById('shadowSoldiersCountDisplay');
+            const ebEl = document.getElementById('shadowEssenceBox');
+            const sxbEl = document.getElementById('soldierXpBonusDisplay');
+            const srbEl = document.getElementById('soldierRaidBonusDisplay');
+
+            if (scEl) scEl.textContent = soldiersCount;
+            if (ebEl) ebEl.textContent = essence;
+            if (sxbEl) sxbEl.textContent = bonuses.soldierXpPct;
+            if (srbEl) srbEl.textContent = bonuses.soldierRaidPct;
 
             if (exp && expStatusEl && expActionEl) {
                 const remainingMs = Math.max(0, exp.endTime - Date.now());
@@ -1984,7 +2234,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                         <div>
                             <span class="font-display font-bold text-purple-300">${exp.shadowName}</span> ist auf Expedition!
-                            <span class="text-xs text-slate-400 ml-2">(Belohnung: <strong class="text-amber-300">+${exp.rewardXp} XP</strong>)</span>
+                            <span class="text-xs text-slate-400 ml-2">(Belohnung: <strong class="text-amber-300">+${exp.rewardXp} XP & +30 Essenz</strong>)</span>
                         </div>
                         <div class="text-xs font-display">
                             Status: ${isReady ? '<span class="text-emerald-400 font-bold">RÜCKKEHR BEREIT</span>' : `<span class="text-cyan-300">Noch ${hrs}h ${mins}m</span>`}
@@ -1993,7 +2243,7 @@
                     </div>
                 `;
                 expActionEl.innerHTML = isReady
-                    ? `<button onclick="claimShadowExpedition()" class="px-4 py-2 rounded font-display font-bold text-xs uppercase bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">Expeditions-XP abholen (+${exp.rewardXp} XP)</button>`
+                    ? `<button onclick="claimShadowExpedition()" class="px-4 py-2 rounded font-display font-bold text-xs uppercase bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition">Expedition abschließen (+${exp.rewardXp} XP)</button>`
                     : `<span class="px-3 py-1.5 rounded text-xs font-display uppercase bg-purple-500/20 text-purple-300 border border-purple-500/40">Mission läuft...</span>`;
             } else if (expStatusEl && expActionEl) {
                 expStatusEl.textContent = "Keine aktive Expedition. Wähle unten einen freigeschalteten Schatten aus, um ihn auf Mission zu schicken!";
@@ -2003,28 +2253,36 @@
             grid.innerHTML = SHADOW_ARMY.map(sh => {
                 const unlocked = lvl >= sh.reqLevel;
                 const isOnMission = exp && exp.shadowId === sh.id;
+                const isEquipped = window.gameState.equippedShadowId === sh.id;
+
                 return `
-                <div class="rounded-lg p-4 border ${unlocked ? 'bg-purple-950/25 border-purple-500/60 shadow-[0_0_15px_rgba(147,51,234,0.2)]' : 'bg-slate-950/60 border-slate-800 opacity-60'} flex flex-col items-center text-center transition">
+                <div class="rounded-lg p-4 border ${isEquipped ? 'bg-purple-900/40 border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.25)]' : (unlocked ? 'bg-purple-950/25 border-purple-500/60 shadow-[0_0_15px_rgba(147,51,234,0.2)]' : 'bg-slate-950/60 border-slate-800 opacity-60')} flex flex-col items-center text-center transition">
                     <div class="w-14 h-14 rounded-full flex items-center justify-center mb-3 ${unlocked ? 'bg-purple-600/30 border-2 border-purple-400 text-purple-300 glow-text-purple' : 'bg-slate-900 border border-slate-700 text-slate-600'}">
                         <i class="fa-solid ${unlocked ? sh.icon : 'fa-lock'} text-2xl"></i>
                     </div>
                     <div class="font-display font-bold text-base ${unlocked ? 'text-white glow-text-purple' : 'text-slate-500'}">${sh.name}</div>
                     <div class="text-xs text-purple-300 font-semibold mt-0.5">${unlocked ? sh.title : 'Versiegelt'}</div>
-                    <div class="mt-2 text-[11px] font-display px-2 py-0.5 rounded ${unlocked ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-900 text-slate-400'}">
-                        ${unlocked ? `EXTRAHIERT ✓ (+${sh.expXp} XP/Mission)` : sh.desc}
+                    <div class="mt-2 text-[11px] font-display px-2 py-0.5 rounded ${unlocked ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'bg-slate-900 text-slate-400'}">
+                        ${unlocked ? `Bonus: ${sh.bonusLabel}` : sh.desc}
                     </div>
                     ${unlocked ? `
-                        <button onclick="startShadowExpedition('${sh.id}')" ${exp ? 'disabled' : ''}
-                            class="mt-3 w-full py-1.5 rounded text-[11px] font-display font-bold uppercase tracking-wider ${isOnMission ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : (exp ? 'bg-slate-900 text-slate-600 cursor-not-allowed' : 'bg-purple-600/40 hover:bg-purple-600/60 text-purple-100 border border-purple-400/50')} transition">
-                            ${isOnMission ? 'Auf Expedition...' : 'Auf Expedition schicken'}
-                        </button>
+                        <div class="w-full space-y-1.5 mt-3">
+                            <button onclick="toggleEquipShadow('${sh.id}')"
+                                class="w-full py-1.5 rounded text-[11px] font-display font-bold uppercase tracking-wider ${isEquipped ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40'} transition">
+                                ${isEquipped ? 'Ausgerüstet ★' : 'Ausrüsten'}
+                            </button>
+                            <button onclick="startShadowExpedition('${sh.id}')" ${exp ? 'disabled' : ''}
+                                class="w-full py-1.5 rounded text-[11px] font-display font-bold uppercase tracking-wider ${isOnMission ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : (exp ? 'bg-slate-900 text-slate-600 cursor-not-allowed' : 'bg-purple-600/40 hover:bg-purple-600/60 text-purple-100 border border-purple-400/50')} transition">
+                                ${isOnMission ? 'Auf Expedition...' : `Expedition (+${sh.expXp} XP)`}
+                            </button>
+                        </div>
                     ` : ''}
                 </div>`;
             }).join('');
         }
 
         function resetAllData() {
-            if (!confirm("Möchtest du wirklich deinen gesamten Fortschritt (Level, XP, Stats, Kalender & Verlauf) zurücksetzen?")) return;
+            if (!confirm("Möchtest du wirklich deinen gesamten Fortschritt (Level, XP, Stats, Schatten, Kalender & Verlauf) zurücksetzen?")) return;
             window.gameState = JSON.parse(JSON.stringify(DEFAULT_STATE));
             window.gameState.lastActiveDate = getTodayStr();
             recordTodayPercentage();
@@ -2099,7 +2357,6 @@
                 const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
                 document.getElementById('dailyCountdownDisplay').textContent = `${h}:${m}:${s}`;
 
-                // Live-Timer für Notfall-Quest
                 const sq = window.gameState.suddenQuest;
                 if (sq) {
                     const rem = Math.max(0, sq.expiresAt - Date.now());
