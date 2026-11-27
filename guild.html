@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYSTEM // Hunter Association & Live-Ranking</title>
+    <title>SYSTEM // Hunter Association, PvP-Duelle & Live-Ranking</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -79,6 +79,12 @@
             box-shadow: 0 0 20px rgba(147, 51, 234, 0.12), inset 0 0 15px rgba(147, 51, 234, 0.05);
         }
         .system-panel-purple::before, .system-panel-purple::after { border-color: #a855f7; }
+
+        .system-panel-danger {
+            border-color: rgba(255, 42, 95, 0.5);
+            box-shadow: 0 0 20px rgba(255, 42, 95, 0.12), inset 0 0 15px rgba(255, 42, 95, 0.05);
+        }
+        .system-panel-danger::before, .system-panel-danger::after { border-color: #ff2a5f; }
 
         .glow-text-cyan { text-shadow: 0 0 10px rgba(0, 229, 255, 0.6); }
         .glow-text-purple { text-shadow: 0 0 10px rgba(168, 85, 247, 0.6); }
@@ -160,7 +166,10 @@
         <!-- NAVIGATION TABS -->
         <nav class="flex overflow-x-auto gap-2 border-b border-slate-800 pb-2">
             <button onclick="switchTab('ranking')" id="tab-btn-ranking" class="tab-btn active px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-cyan-500/20 text-cyan-300 border border-cyan-500/50 transition whitespace-nowrap">
-                <i class="fa-solid fa-trophy mr-1.5"></i>Live-Ranking & Tagesziele
+                <i class="fa-solid fa-trophy mr-1.5"></i>Live-Ranking & Raid
+            </button>
+            <button onclick="switchTab('pvp')" id="tab-btn-pvp" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
+                <i class="fa-solid fa-swords mr-1.5 text-rose-400"></i>PvP-Duelle (7-Tage)
             </button>
             <button onclick="switchTab('charts')" id="tab-btn-charts" class="tab-btn px-4 py-2 rounded-t font-display text-xs sm:text-sm font-bold tracking-wider uppercase bg-slate-900/60 text-slate-400 hover:text-slate-200 border border-transparent transition whitespace-nowrap">
                 <i class="fa-solid fa-chart-column mr-1.5"></i>Grafischer Vergleich
@@ -176,15 +185,15 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4 mb-4">
                     <div>
                         <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">ECHTZEIT-SYNCHRONISATION</span>
-                        <h2 class="font-display font-bold text-xl text-white mt-0.5">JÄGER-RANGLISTE, RAID-SCHADEN & LIVE-FORTSCHRITT</h2>
+                        <h2 class="font-display font-bold text-xl text-white mt-0.5">JÄGER-RANGLISTE, RAID-SCHADEN & SCHATTEN-ARMEE</h2>
                     </div>
                     <div class="flex items-center gap-2">
                         <select id="sortRankingSelect" onchange="renderAll()" class="bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-xs font-display text-cyan-300 focus:border-cyan-400">
                             <option value="level_xp">Sortieren: Level & XP</option>
                             <option value="raid_damage">Sortieren: Gilden-Raid-Schaden</option>
                             <option value="today_pct">Sortieren: Tagesziel % (Heute)</option>
+                            <option value="soldiers">Sortieren: Schatten-Soldaten</option>
                             <option value="streak">Sortieren: Längste Serie</option>
-                            <option value="total_stats">Sortieren: Gesamt-Stats</option>
                         </select>
                     </div>
                 </div>
@@ -195,10 +204,52 @@
             </div>
         </section>
 
-        <!-- TAB 2: CHARTS & COMPARISON -->
+        <!-- TAB 2: PVP DUELS (7-DAY CHALLENGES) -->
+        <section id="tab-pvp" class="tab-content space-y-5">
+            <div class="system-panel system-panel-danger rounded-lg p-5 space-y-5">
+                <div class="border-b border-slate-800 pb-4">
+                    <span class="text-xs font-display text-rose-400 tracking-widest uppercase">JÄGER VS. JÄGER // 7-TAGE-HERAUSFORDERUNG</span>
+                    <h2 class="font-display font-bold text-xl text-white mt-0.5">NEUES PVP-DUELL STARTEN</h2>
+                    <p class="text-xs text-slate-300 mt-1">Wähle zwei Jäger und eine Wertungskategorie. Das System berechnet live den Sieger über die letzten 7 Trainingstage!</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+                    <div>
+                        <label class="block text-xs font-display uppercase text-cyan-300 mb-1">Herausforderer (Jäger 1)</label>
+                        <select id="pvpChallengerSelect" class="w-full bg-slate-950 border border-cyan-500/40 rounded px-3 py-2 text-xs font-display text-white"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-display uppercase text-purple-300 mb-1">Gegner (Jäger 2)</label>
+                        <select id="pvpOpponentSelect" class="w-full bg-slate-950 border border-purple-500/40 rounded px-3 py-2 text-xs font-display text-white"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-display uppercase text-slate-400 mb-1">Duell-Modus (7 Tage)</label>
+                        <select id="pvpMetricSelect" class="w-full bg-slate-950 border border-slate-700 rounded px-3 py-2 text-xs font-display text-white">
+                            <option value="avg_pct">Ø Tagesziel-Quote (%)</option>
+                            <option value="full_days">Anzahl 100%+ Tage</option>
+                            <option value="raid_dmg">Gesamter Raid-Schaden</option>
+                        </select>
+                    </div>
+                    <button onclick="createPvpDuel()" class="py-2.5 px-4 rounded font-display font-bold text-xs uppercase tracking-wider bg-rose-600 hover:bg-rose-500 text-white shadow-[0_0_15px_rgba(255,42,95,0.4)] transition">
+                        <i class="fa-solid fa-khanda mr-1.5"></i>Duell starten
+                    </button>
+                </div>
+            </div>
+
+            <div class="system-panel rounded-lg p-5 space-y-4">
+                <div class="border-b border-slate-800 pb-3">
+                    <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">LIVE-ARENA</span>
+                    <h3 class="font-display font-bold text-lg text-white">AKTIVE PVP-DUELLE</h3>
+                </div>
+                <div id="pvpDuelsContainer" class="space-y-4">
+                    <p class="text-sm text-slate-400 text-center py-6">Noch keine aktiven PvP-Duelle. Starte oben eine Herausforderung!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: CHARTS & COMPARISON -->
         <section id="tab-charts" class="tab-content space-y-5">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                <!-- Level & XP Bar Chart -->
                 <div class="lg:col-span-7 system-panel rounded-lg p-5 space-y-4">
                     <div class="border-b border-slate-800 pb-3">
                         <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">FORTSCHRITTS-VERGLEICH</span>
@@ -209,7 +260,6 @@
                     </div>
                 </div>
 
-                <!-- Radar Stat Comparison -->
                 <div class="lg:col-span-5 system-panel system-panel-purple rounded-lg p-5 space-y-4">
                     <div class="border-b border-slate-800 pb-3">
                         <span class="text-xs font-display text-purple-400 tracking-widest uppercase">ATRIBUT-ANALYSE</span>
@@ -233,7 +283,6 @@
                 </div>
             </div>
 
-            <!-- 7-Tage Verlauf aller Benutzer -->
             <div class="system-panel rounded-lg p-5 space-y-4">
                 <div class="border-b border-slate-800 pb-3">
                     <span class="text-xs font-display text-cyan-400 tracking-widest uppercase">AKTIVITÄTS-VERLAUF</span>
@@ -245,7 +294,7 @@
             </div>
         </section>
 
-        <!-- TAB 3: QUEST & EXERCISE CREATOR FOR ANY HUNTER -->
+        <!-- TAB 4: QUEST & EXERCISE CREATOR FOR ANY HUNTER -->
         <section id="tab-quest-manager" class="tab-content space-y-5">
             <div class="system-panel system-panel-purple rounded-lg p-5 space-y-5">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-4">
@@ -260,7 +309,6 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Formular: Neue Dungeon-Quest zuweisen -->
                     <div class="bg-slate-950/70 border border-purple-500/30 rounded-lg p-4 space-y-3">
                         <h3 class="font-display font-bold text-base text-purple-300 flex items-center gap-2">
                             <i class="fa-solid fa-dungeon"></i> Neue Dungeon-Quest zuweisen
@@ -297,7 +345,6 @@
                         </button>
                     </div>
 
-                    <!-- Formular: Neue Tagesübung hinzufügen -->
                     <div class="bg-slate-950/70 border border-cyan-500/30 rounded-lg p-4 space-y-3">
                         <h3 class="font-display font-bold text-base text-cyan-300 flex items-center gap-2">
                             <i class="fa-solid fa-dumbbell"></i> Neue Tagesübung (Daily Quest) hinzufügen
@@ -336,10 +383,7 @@
                     </div>
                 </div>
 
-                <!-- Aktuelle Quests & Tagesübungen des gewählten Benutzers -->
-                <div id="managedHunterLists" class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
-                    <!-- Dynamisch gerendert -->
-                </div>
+                <div id="managedHunterLists" class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2"></div>
             </div>
         </section>
 
@@ -395,7 +439,8 @@
             collection,
             doc,
             onSnapshot,
-            updateDoc
+            updateDoc,
+            setDoc
         } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -414,6 +459,7 @@
         const googleProvider = new GoogleAuthProvider();
 
         window.allHunters = [];
+        window.activeDuels = [];
         window.currentUserUid = null;
 
         onAuthStateChanged(auth, (user) => {
@@ -455,6 +501,26 @@
             statusEl.textContent = "FEHLER BEIM LADEN DER DATENBANK (PRÜFE FIRESTORE RULES)";
             statusEl.className = "text-xs text-rose-400 tracking-wide font-semibold";
         });
+
+        // Echtzeit-Listener für PvP-Duelle
+        const PVP_DOC_REF = doc(db, "guild_raids", "pvp_duels");
+        onSnapshot(PVP_DOC_REF, (snap) => {
+            if (snap.exists() && Array.isArray(snap.data().duels)) {
+                window.activeDuels = snap.data().duels;
+            } else {
+                window.activeDuels = [];
+            }
+            if (typeof window.renderPvpDuels === 'function') window.renderPvpDuels();
+        });
+
+        window.savePvpDuels = async function(duelsArr) {
+            try {
+                await setDoc(PVP_DOC_REF, { duels: duelsArr, updatedAt: new Date().toISOString() }, { merge: true });
+                window.showNotification("PVP-ARENA AKTUALISIERT", "Duell-Liste wurde gespeichert.", "fa-swords");
+            } catch (err) {
+                console.error(err);
+            }
+        };
 
         window.updateHunterDoc = async function(uid, payload) {
             try {
@@ -498,7 +564,7 @@
         };
     </script>
 
-    <!-- UI, RANKING, CHARTS & QUEST MANAGEMENT LOGIC -->
+    <!-- UI, RANKING, PVP DUELS, CHARTS & QUEST MANAGEMENT LOGIC -->
     <script>
         let barChartInstance = null;
         let radarChartInstance = null;
@@ -527,7 +593,7 @@
             if (hunter.lastActiveDate === today && exercises.length > 0) {
                 const sum = exercises.reduce((acc, ex) => {
                     const goal = ex.goal > 0 ? ex.goal : 1;
-                    return acc + Math.min(1.5, Math.max(0, (ex.current || 0) / goal));
+                    return acc + Math.min(2.0, Math.max(0, (ex.current || 0) / goal));
                 }, 0);
                 return Math.round((sum / exercises.length) * 100);
             }
@@ -537,8 +603,29 @@
             return 0;
         }
 
+        function getHunter7DayStats(hunter) {
+            const now = new Date();
+            let sumPct = 0;
+            let fullDays = 0;
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(now);
+                d.setDate(now.getDate() - i);
+                const iso = d.toISOString().split('T')[0];
+                const pct = iso === getTodayStr()
+                    ? getHunterTodayPct(hunter)
+                    : ((hunter.dailyHistory && typeof hunter.dailyHistory[iso] === 'number') ? hunter.dailyHistory[iso] : 0);
+                sumPct += pct;
+                if (pct >= 100) fullDays++;
+            }
+            return { avgPct: Math.round(sumPct / 7), fullDays };
+        }
+
         function getHunterRaidDamage(hunter) {
             return Number(hunter.myRaidDamage || 0);
+        }
+
+        function getHunterSoldiers(hunter) {
+            return Number(hunter.shadowSoldiersCount || 0);
         }
 
         function getTotalStats(hunter) {
@@ -557,11 +644,11 @@
                 } else if (mode === 'today_pct') {
                     const diff = getHunterTodayPct(b) - getHunterTodayPct(a);
                     if (diff !== 0) return diff;
+                } else if (mode === 'soldiers') {
+                    const diff = getHunterSoldiers(b) - getHunterSoldiers(a);
+                    if (diff !== 0) return diff;
                 } else if (mode === 'streak') {
                     const diff = (b.streak || 0) - (a.streak || 0);
-                    if (diff !== 0) return diff;
-                } else if (mode === 'total_stats') {
-                    const diff = getTotalStats(b) - getTotalStats(a);
                     if (diff !== 0) return diff;
                 }
                 const lvlDiff = (b.level || 1) - (a.level || 1);
@@ -576,6 +663,7 @@
             updateKpis(sorted);
             renderRankingList(sorted);
             populateHunterSelectors(sorted);
+            renderPvpDuels();
             renderManagedHunterDetails();
             updateCharts();
         };
@@ -629,6 +717,7 @@
                 const todayPct = getHunterTodayPct(h);
                 const raidDmg = getHunterRaidDamage(h);
                 const raidSharePct = Math.min(100, Math.round((raidDmg / maxRaidDmg) * 100));
+                const soldiers = getHunterSoldiers(h);
                 const rankInfo = getRankInfo(lvl);
                 const isMe = window.currentUserUid && h.uid === window.currentUserUid;
                 const stats = h.stats || { str: 10, agi: 10, vit: 10, int: 10, per: 10 };
@@ -653,10 +742,10 @@
                                     <span class="font-display font-bold text-base text-white truncate">${h.playerName || 'UNBEKANNT'}</span>
                                     ${isMe ? '<span class="text-[10px] font-display px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">DU</span>' : ''}
                                 </div>
-                                <div class="text-xs text-slate-400 flex items-center gap-2.5 mt-0.5">
+                                <div class="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
                                     <span class="text-cyan-300 font-display font-bold">LVL ${lvl}</span>
                                     <span class="text-amber-400"><i class="fa-solid fa-fire mr-0.5"></i>${h.streak || 0}T</span>
-                                    <span>Stats: ${getTotalStats(h)}</span>
+                                    <span class="text-purple-300"><i class="fa-solid fa-skull mr-0.5"></i>${soldiers}</span>
                                 </div>
                             </div>
                         </div>
@@ -690,7 +779,7 @@
                             <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
                                 <div class="h-full bg-gradient-to-r from-rose-600 to-amber-500 transition-all duration-500" style="width: ${raidSharePct}%"></div>
                             </div>
-                            <div class="text-[11px] text-slate-500 mt-1">Anteil am Top-Schaden: ${raidSharePct}%</div>
+                            <div class="text-[11px] text-slate-500 mt-1">Schatten-Armee: ${soldiers} Soldaten ${h.equippedShadowId ? `(${h.equippedShadowId.toUpperCase()})` : ''}</div>
                         </div>
 
                         <!-- Live Tagesziel % -->
@@ -717,8 +806,110 @@
             }).join('');
         }
 
+        // PVP-DUELLE LOGIK
+        async function createPvpDuel() {
+            const uidA = document.getElementById('pvpChallengerSelect')?.value;
+            const uidB = document.getElementById('pvpOpponentSelect')?.value;
+            const metric = document.getElementById('pvpMetricSelect')?.value || 'avg_pct';
+
+            if (!uidA || !uidB || uidA === uidB) {
+                showNotification("HINWEIS", "Bitte wähle zwei unterschiedliche Jäger für das Duell aus.", "fa-circle-exclamation");
+                return;
+            }
+
+            const newDuel = {
+                id: Date.now(),
+                uidA,
+                uidB,
+                metric,
+                createdAt: getTodayStr()
+            };
+
+            const nextDuels = [newDuel, ...(window.activeDuels || [])];
+            await window.savePvpDuels(nextDuels);
+        }
+
+        async function deletePvpDuel(duelId) {
+            const filtered = (window.activeDuels || []).filter(d => d.id !== duelId);
+            await window.savePvpDuels(filtered);
+        }
+
+        window.renderPvpDuels = function() {
+            const container = document.getElementById('pvpDuelsContainer');
+            if (!container) return;
+            const duels = window.activeDuels || [];
+            const hunters = window.allHunters || [];
+
+            if (!duels.length) {
+                container.innerHTML = `<p class="text-sm text-slate-400 text-center py-6">Noch keine aktiven PvP-Duelle. Starte oben eine Herausforderung!</p>`;
+                return;
+            }
+
+            container.innerHTML = duels.map(duel => {
+                const hA = hunters.find(h => h.uid === duel.uidA);
+                const hB = hunters.find(h => h.uid === duel.uidB);
+                if (!hA || !hB) return '';
+
+                let valA = 0, valB = 0, unit = '%', metricLabel = 'Ø Tagesziel-Quote (7 Tage)';
+                if (duel.metric === 'avg_pct') {
+                    valA = getHunter7DayStats(hA).avgPct;
+                    valB = getHunter7DayStats(hB).avgPct;
+                    unit = '%';
+                    metricLabel = 'Ø Tagesziel-Quote (7 Tage)';
+                } else if (duel.metric === 'full_days') {
+                    valA = getHunter7DayStats(hA).fullDays;
+                    valB = getHunter7DayStats(hB).fullDays;
+                    unit = ' Tage';
+                    metricLabel = '100%+ Tage (letzte 7 Tage)';
+                } else if (duel.metric === 'raid_dmg') {
+                    valA = getHunterRaidDamage(hA);
+                    valB = getHunterRaidDamage(hB);
+                    unit = ' DMG';
+                    metricLabel = 'Gilden-Raid-Schaden';
+                }
+
+                const total = Math.max(1, valA + valB);
+                const pctA = Math.round((valA / total) * 100);
+                const pctB = 100 - pctA;
+
+                const leaderText = valA > valB
+                    ? `FÜHREND: ${hA.playerName}`
+                    : (valB > valA ? `FÜHREND: ${hB.playerName}` : 'GLEICHSTAND');
+
+                return `
+                <div class="bg-slate-950/80 border border-rose-500/40 rounded-lg p-4 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-display uppercase px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">${metricLabel}</span>
+                            <span class="text-xs font-display font-bold text-amber-300">${leaderText}</span>
+                        </div>
+                        <button onclick="deletePvpDuel(${duel.id})" class="text-xs text-slate-500 hover:text-rose-400">
+                            <i class="fa-solid fa-trash-can"></i> Beenden
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-11 items-center gap-2 text-center">
+                        <div class="col-span-5 text-left">
+                            <div class="font-display font-bold text-base text-cyan-300 truncate">${hA.playerName}</div>
+                            <div class="font-display font-black text-xl text-white">${valA.toLocaleString('de-DE')}${unit}</div>
+                        </div>
+                        <div class="col-span-1 font-display font-black text-rose-500 text-lg">VS</div>
+                        <div class="col-span-5 text-right">
+                            <div class="font-display font-bold text-base text-purple-300 truncate">${hB.playerName}</div>
+                            <div class="font-display font-black text-xl text-white">${valB.toLocaleString('de-DE')}${unit}</div>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden flex border border-slate-800">
+                        <div class="h-full bg-cyan-500 transition-all duration-500" style="width: ${pctA}%"></div>
+                        <div class="h-full bg-purple-600 transition-all duration-500" style="width: ${pctB}%"></div>
+                    </div>
+                </div>`;
+            }).join('');
+        };
+
         function populateHunterSelectors(sorted) {
-            const ids = ['radarHunterA', 'radarHunterB', 'targetHunterSelect'];
+            const ids = ['radarHunterA', 'radarHunterB', 'targetHunterSelect', 'pvpChallengerSelect', 'pvpOpponentSelect'];
             ids.forEach((selId) => {
                 const sel = document.getElementById(selId);
                 if (!sel) return;
@@ -726,7 +917,7 @@
                 sel.innerHTML = sorted.map(h => `<option value="${h.uid}">${h.playerName || 'Unbekannt'} (Lvl ${h.level || 1})</option>`).join('');
                 if (prevVal && sorted.some(h => h.uid === prevVal)) {
                     sel.value = prevVal;
-                } else if (selId === 'radarHunterB' && sorted.length > 1) {
+                } else if ((selId === 'radarHunterB' || selId === 'pvpOpponentSelect') && sorted.length > 1) {
                     sel.value = sorted[1].uid;
                 }
             });
@@ -1050,9 +1241,8 @@
             activeBtn.classList.remove('bg-slate-900/60', 'text-slate-400', 'border-transparent');
             activeBtn.classList.add('bg-cyan-500/20', 'text-cyan-300', 'border-cyan-500/50');
 
-            if (tabName === 'charts') {
-                setTimeout(updateCharts, 50);
-            }
+            if (tabName === 'charts') setTimeout(updateCharts, 50);
+            if (tabName === 'pvp') renderPvpDuels();
         }
 
         function openAuthModal() {
